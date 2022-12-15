@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
   servlet:
     context-path: /api/
 spring:
@@ -11,4 +11,4 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/pay_my_buddy
     username: root
-    password: admin1
+    password: admin
