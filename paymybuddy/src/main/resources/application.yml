@@ -3,6 +3,13 @@ server:
   servlet:
     context-path: /api/
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: fea08f772bb001a15162
+            client-secret: b6daab70e9336fa7d9d994ae9dd004b6a41d8c00
   jpa:
     generate-ddl: true
     show-sql: true
