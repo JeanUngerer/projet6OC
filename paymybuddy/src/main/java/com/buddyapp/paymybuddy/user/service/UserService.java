@@ -57,6 +57,7 @@ public class UserService implements UserDetailsService {
             User user = userMapper.dtoToModel(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(userMapper.modelToEntity(user));
+            user = userMapper.entityToModel(userRepository.findByEmail(user.getEmail()).get());
             return user;
         } catch (Exception e) {
             log.error("Couldn't create user: " + e.getMessage());

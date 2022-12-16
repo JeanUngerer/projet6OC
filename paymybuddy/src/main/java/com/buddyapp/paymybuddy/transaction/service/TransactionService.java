@@ -69,7 +69,6 @@ public class TransactionService {
     public Transaction sendTransaction(Transaction transaction) {
         try {
 
-            //Transaction transaction = transactionMapper.dtoToModel(dto);
             User trader = userService.getUserById(transaction.getTrader().getUserId());
             User user = userService.getUserById(transaction.getUser().getUserId());
 
@@ -83,25 +82,25 @@ public class TransactionService {
 
             transaction.setUser(user);
 
+
             transaction.setTrader(trader);
 
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
 
 
-            transactionTemplate.execute(new TransactionCallback<Void>() {
-                public Void doInTransaction(TransactionStatus transactionStatus) {
+          /*  transactionTemplate.execute(new TransactionCallback<Void>() {
+                public Void doInTransaction(TransactionStatus transactionStatus) {*/
                     try {
                         transactionRepository.save(transactionMapper.modelToEntity(transaction));
-                        return null;
+                        return transaction;
                     } catch (Throwable t) {
-                        transactionStatus.setRollbackOnly();
+                        //transactionStatus.setRollbackOnly();
                         throw new ExceptionHandler( "Error during the new balances attribution : " + t.getMessage());
                     }
                     //return null;
-                }
-            });
+               // }
+          //  });
 
-            return transaction;
         } catch (Exception e) {
             log.error("Couldn't receive transaction: " + e.getMessage());
             throw new ExceptionHandler("We could not complete your transaction");
