@@ -39,6 +39,12 @@ public class ContactController {
         return ResponseEntity.ok(contactMapper.modelToDto(contactService.createContact(contactDto)));
     }
 
+    @PutMapping("/add")
+    public ResponseEntity<String> addContact(@RequestBody String mailAddress) {
+
+        return ResponseEntity.ok(contactService.addContact(mailAddress));
+    }
+
     @PostMapping("")
     public ResponseEntity<ContactDTO> updateUser(@RequestBody ContactDTO contactDto) {
         return ResponseEntity.ok(contactMapper.modelToDto(contactService.updateContact(contactDto)));

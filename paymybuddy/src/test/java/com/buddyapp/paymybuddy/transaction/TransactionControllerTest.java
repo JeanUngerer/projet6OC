@@ -52,28 +52,21 @@ public class TransactionControllerTest {
 
         String requestJson = "{ \"transactionId\":1, \"amount\":100.0, \"description\":\"testTransaction for 100\", " +
                 "\"trader\":{\"userId\":3, \"email\":\"mail2@mail.com\", \"password\":\"$2a$10$7TWG.9Qo00cX6erxlMf1MOrPxCCc3o7jZpl4QpC9fBwyNG5..pNz6\", " +
-                "\"firstName\":\"firstName2\", \"lastName\":\"lastName2\", \"phoneNumber\":\"0202020202\", \"balance\":0.0, \"contacts\":{}, \"transactions\":{}}, " +
+                "\"firstName\":\"firstName2\", \"lastName\":\"lastName2\", \"phoneNumber\":\"0202020202\", \"balance\":0.0, \"contacts\":[], \"transactions\":[]}, " +
                 "\"user\":{\"userId\":2, \"email\":\"mail1@mail.com\", \"password\":\"$2a$10$6iFqdLs8MtcNstc6BDOs9.rkbEyOwAoyn0jMJQ0KK0EdFIOqU9F0a\", " +
-                "\"firstName\":\"firstName1\", \"lastName\":\"lastName1\", \"phoneNumber\":\"0101010101\", \"balance\":1000.0, \"contacts\":{}, \"transactions\":{}}}";
+                "\"firstName\":\"firstName1\", \"lastName\":\"lastName1\", \"phoneNumber\":\"0101010101\", \"balance\":1000.0, \"contacts\":[], \"transactions\":[]}}";
 
 
 
-        System.out.println("TRANSACTION OBJECT : " + requestJson);
-
-    /*
-        mockMvc.perform( post("/transaction/send")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestJson))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("100")));*/
+        Transaction transaction = new Transaction(1L, 100.,0.,  "testTransaction for 100", trader, sender);
+        System.out.println("TRANSACTION OBJECT : " + asJsonString(transaction));
 
         mockMvc.perform(put("/transaction/send")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(requestJson))
+                .content(asJsonString(transaction)))
                 .andDo(print())
                 .andExpect(status().isOk()).andExpect(content()
-                        .contentType("application/json;charset=UTF-8"))
+                        .contentType("application/json"))
                 .andExpect(jsonPath("$.amount").value(100));
 
 
@@ -94,15 +87,15 @@ public class TransactionControllerTest {
                 "\"firstName\":\"firstName1\", \"lastName\":\"lastName1\", \"phoneNumber\":\"0101010101\", \"balance\":1000.0, \"contacts\":{}, \"transactions\":{}}}";
 
 
-        Transaction transaction = new Transaction(1L, 100., "testTransaction for 100", trader, sender);
+        Transaction transaction = new Transaction(1L, 100.,0., "testTransaction for 100", trader, sender);
         System.out.println("TRANSACTION OBJECT : " + asJsonString(transaction));
 
-        mockMvc.perform(get("/transaction/send")
+        mockMvc.perform(get("/transaction/dummy")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(transaction)))
                 .andDo(print())
                 .andExpect(status().isOk()).andExpect(content()
-                        .contentType("application/json;charset=UTF-8"))
+                        .contentType("application/json"))
                 .andExpect(jsonPath("$.amount").value(100));
 
     }

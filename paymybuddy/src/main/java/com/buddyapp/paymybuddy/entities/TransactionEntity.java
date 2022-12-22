@@ -23,7 +23,10 @@ public class TransactionEntity {
     @Column(name = "amount", nullable = false, length = 8, precision = 2)
     Double amount;
 
-    @Column(name = "description", length = 50)
+    @Column(name = "fee", nullable = true, length = 8, precision = 2)
+    Double fee;
+
+    @Column(name = "description")
     String description;
 
     @ManyToOne(fetch = FetchType.LAZY)

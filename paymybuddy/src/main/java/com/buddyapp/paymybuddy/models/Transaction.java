@@ -10,6 +10,7 @@ import lombok.*;
 public class Transaction {
     Long transactionId;
     Double amount;
+    Double fee;
     String description;
     User trader;
     User user;

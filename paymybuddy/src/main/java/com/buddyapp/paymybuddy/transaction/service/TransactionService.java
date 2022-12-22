@@ -7,6 +7,7 @@ import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.helper.annotations.example.TransactionFee;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
+import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.models.User;
 import com.buddyapp.paymybuddy.transaction.repository.TransactionRepository;
@@ -42,6 +43,8 @@ public class TransactionService {
     TransactionRepository transactionRepository;
     TransactionMapper transactionMapper;
     UserRepository userRepository;
+
+    UserMapper userMapper;
 
     public List<Transaction> findAllUserTransactions(Long userId) {
         try {
@@ -92,6 +95,8 @@ public class TransactionService {
                 public Void doInTransaction(TransactionStatus transactionStatus) {*/
                     try {
                         transactionRepository.save(transactionMapper.modelToEntity(transaction));
+                        userRepository.save(userMapper.modelToEntity(trader));
+                        userRepository.save(userMapper.modelToEntity(user));
                         return transaction;
                     } catch (Throwable t) {
                         //transactionStatus.setRollbackOnly();

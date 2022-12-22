@@ -21,5 +21,6 @@ public class User {
     String phoneNumber;
     Double balance;
     List<Contact> contacts;
+    //List<User> contactsOf;
     List<Transaction> transactions;
 }

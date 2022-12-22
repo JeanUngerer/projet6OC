@@ -11,6 +11,7 @@ import lombok.*;
 public class TransactionDTO {
     Long transactionId;
     Double amount;
+    Double fee;
     String description;
     User trader;
     User user;

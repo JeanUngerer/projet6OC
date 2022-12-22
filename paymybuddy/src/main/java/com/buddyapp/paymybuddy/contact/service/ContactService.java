@@ -81,4 +81,9 @@ public class ContactService {
             throw new ExceptionHandler("We could not delete your contact");
         }
     }
+
+    public String addContact(String mailAddress) {
+        //TODO using jwt to recognise user
+        return "Done";
+    }
 }

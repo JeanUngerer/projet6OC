@@ -46,4 +46,21 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "transactionId")
     List<TransactionEntity> transactions;
+
+    /*
+    @ManyToMany
+    @JoinTable(name="tbl_contacts",
+            joinColumns=@JoinColumn(name="friendId"),
+            inverseJoinColumns=@JoinColumn(name="personId")
+    )
+    List<UserEntity> contacts;
+
+    @ManyToMany
+    @JoinTable(name="tbl_contacts",
+            joinColumns=@JoinColumn(name="personId"),
+            inverseJoinColumns=@JoinColumn(name="friendId")
+    )
+    List<UserEntity> contactsOf;
+
+     */
 }

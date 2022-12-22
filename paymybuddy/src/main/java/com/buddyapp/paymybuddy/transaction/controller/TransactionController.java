@@ -43,7 +43,7 @@ public class TransactionController {
     }
 
     @GetMapping("/dummy")
-    public ResponseEntity<String> dummyController(@RequestBody TransactionDTO dto){
-        return ResponseEntity.ok(dto.toString());
+    public ResponseEntity<TransactionDTO> dummyController(@RequestBody TransactionDTO dto){
+        return ResponseEntity.ok(dto);
     }
 }
