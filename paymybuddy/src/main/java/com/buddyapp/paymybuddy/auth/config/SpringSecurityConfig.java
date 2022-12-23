@@ -37,35 +37,15 @@ public class SpringSecurityConfig {
 
     private static List<String> clients = Arrays.asList("github");
 
-/*
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-        auth.inMemoryAuthentication()
-                .withUser("springuser").password(passwordEncoder().encode("spring123")).roles("USER")
-                .and()
-                .withUser("springadmin").password(passwordEncoder().encode("spring123")).roles("ADMIN", "USER");
-    }
-*/
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((authz) -> {
-                            try {
-                                authz
-                                        .anyRequest().authenticated()
-                                        .and()
-                                        .formLogin()
-                                        .and()
-                                        .oauth2Login();
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                )
-                .httpBasic(withDefaults());
-        return http.build();
+        return http
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated())
+                .formLogin(withDefaults())
+                .oauth2Login(withDefaults())
+                .build();
     }
 
     @Bean
@@ -91,56 +71,6 @@ public class SpringSecurityConfig {
                 .and()
                 .build();
     }
-/*
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        List<ClientRegistration> registrations = clients.stream()
-                .map(c -> getRegistration(c))
-                .filter(registration -> registration != null)
-                .collect(Collectors.toList());
-
-        return new InMemoryClientRegistrationRepository(registrations);
-    }*/
-
-
-
-
-
-/*
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/admin").hasRole("ADMIN")
-                .anyRequest().authenthicated()
-                .and()
-                .formLogin();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/user/create").permitAll();
-//        http.authorizeRequests().anyRequest().permitAll();
-        http.authorizeRequests().anyRequest().authenticated();
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-        customAuthenticationFilter.setFilterProcessesUrl("/authentication/login");
-        http.addFilter(customAuthenticationFilter);
-//        http.addFilterBefore(customAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);*/
- //   }
 
 
     @Bean
@@ -149,32 +79,4 @@ public class SpringSecurityConfig {
     }
 
 
-
-
-
-
-
-
-/*
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-*/
-//    @Bean
-//    public CustomAuthorizationFilter customAuthorizationFilter() {
-//        return new CustomAuthorizationFilter();
-//    }
 }
-
-
-/*
-    private final PasswordEncoder passwordEncoder;
-    private final UserDetailsService userDetailsService;
-
-    @Autowired
-    public SecurityConfig(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
-        this.passwordEncoder = passwordEncoder;
-        this.userDetailsService = userDetailsService;
-    }*/
