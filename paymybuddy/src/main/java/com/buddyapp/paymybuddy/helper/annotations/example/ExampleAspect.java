@@ -67,11 +67,11 @@ public class ExampleAspect {
 
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
 
-        transactionTemplate.execute((transactionStatus) -> {
+        Transaction transactionPlayed = transactionTemplate.execute((transactionStatus) -> {
             return doInTransaction(transactionStatus, amount, transactionToPlay, proceedingJoinPoint);
         });
 
-        return proceed[0];
+        return transactionPlayed;
     }
 
     /*
@@ -107,7 +107,7 @@ public class ExampleAspect {
         });
     }*/
 
-    public Object doInTransaction(TransactionStatus transactionStatus, Double amount, Transaction transactionToPlay, ProceedingJoinPoint proceedingJoinPoint) {
+    public Transaction doInTransaction(TransactionStatus transactionStatus, Double amount, Transaction transactionToPlay, ProceedingJoinPoint proceedingJoinPoint) {
         try {
             final Object[] proceed = new Object[1];
             Object[] arguments = proceedingJoinPoint.getArgs();
@@ -123,14 +123,12 @@ public class ExampleAspect {
                 }
             }
 
-
-            ReflectiveMethodInvocation invocation = (ReflectiveMethodInvocation) proceedingJoinPoint;
-            invocation.setArguments(arguments);
             proceed[0] = proceedingJoinPoint.proceed();
+            userInfo = userService.getUserById(transactionToPlay.getUser().getUserId());
             userInfo.setBalance(userInfo.getBalance()-gasFee);
             userRepository.save(userMapper.modelToEntity(userInfo));
 
-            return proceed[0];
+            return transactionToPlay;
 
         } catch (Throwable t) {
             transactionStatus.setRollbackOnly();

@@ -2,6 +2,7 @@ package com.buddyapp.paymybuddy.transaction.controller;
 
 import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
+import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.transaction.service.TransactionService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AccessLevel;
@@ -39,7 +40,8 @@ public class TransactionController {
     @PutMapping("/send")
     @RolesAllowed("ADMIN")
     public ResponseEntity<TransactionDTO> findTransactionById(@RequestBody TransactionDTO dto) {
-        return ResponseEntity.ok(transactionMapper.modelToDto(transactionService.sendTransaction(transactionMapper.dtoToModel(dto))));
+        Transaction response = transactionService.sendTransaction(transactionMapper.dtoToModel(dto));
+        return ResponseEntity.ok(transactionMapper.modelToDto(response));
     }
 
     @GetMapping("/dummy")

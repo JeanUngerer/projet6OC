@@ -1,7 +1,6 @@
 package com.buddyapp.paymybuddy.transaction.service;
 
 
-import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
@@ -91,25 +90,26 @@ public class TransactionService {
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
 
 
-          /*  transactionTemplate.execute(new TransactionCallback<Void>() {
-                public Void doInTransaction(TransactionStatus transactionStatus) {*/
+            transactionTemplate.execute(new TransactionCallback<Void>() {
+                public Void doInTransaction(TransactionStatus transactionStatus) {
                     try {
                         transactionRepository.save(transactionMapper.modelToEntity(transaction));
                         userRepository.save(userMapper.modelToEntity(trader));
                         userRepository.save(userMapper.modelToEntity(user));
-                        return transaction;
+
                     } catch (Throwable t) {
-                        //transactionStatus.setRollbackOnly();
+                        transactionStatus.setRollbackOnly();
                         throw new ExceptionHandler( "Error during the new balances attribution : " + t.getMessage());
                     }
-                    //return null;
-               // }
-          //  });
+                    return null;
+                }
+            });
 
         } catch (Exception e) {
             log.error("Couldn't receive transaction: " + e.getMessage());
             throw new ExceptionHandler("We could not complete your transaction");
         }
+        return  transaction;
     }
 
 }

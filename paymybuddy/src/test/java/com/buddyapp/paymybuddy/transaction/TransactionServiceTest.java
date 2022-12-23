@@ -2,7 +2,6 @@ package com.buddyapp.paymybuddy.transaction;
 
 
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
-import com.buddyapp.paymybuddy.constants.FeesRate;
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.models.User;
@@ -10,7 +9,6 @@ import com.buddyapp.paymybuddy.transaction.service.TransactionService;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -21,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = false)
 public class TransactionServiceTest {
 
     @Autowired
