@@ -7,8 +7,8 @@ import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.helper.annotations.example.TransactionFee;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
+import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
-import com.buddyapp.paymybuddy.models.User;
 import com.buddyapp.paymybuddy.transaction.repository.TransactionRepository;
 import com.buddyapp.paymybuddy.user.repository.UserRepository;
 import com.buddyapp.paymybuddy.user.service.UserService;
@@ -71,18 +71,18 @@ public class TransactionService {
     public Transaction sendTransaction(Transaction transaction) {
         try {
 
-            User trader = userService.getUserById(transaction.getTrader().getUserId());
-            User user = userService.getUserById(transaction.getUser().getUserId());
+            MyUser trader = userService.getUserById(transaction.getTrader().getUserId());
+            MyUser myUser = userService.getUserById(transaction.getMyUser().getUserId());
 
-            if (user.getBalance() < transaction.getAmount()) {
+            if (myUser.getBalance() < transaction.getAmount()) {
                 throw new ExceptionHandler("Not enough money");
             }
 
             trader.setBalance(trader.getBalance() + transaction.getAmount());
 
-            user.setBalance(user.getBalance() - transaction.getAmount());
+            myUser.setBalance(myUser.getBalance() - transaction.getAmount());
 
-            transaction.setUser(user);
+            transaction.setMyUser(myUser);
 
 
             transaction.setTrader(trader);
@@ -95,7 +95,7 @@ public class TransactionService {
                     try {
                         transactionRepository.save(transactionMapper.modelToEntity(transaction));
                         userRepository.save(userMapper.modelToEntity(trader));
-                        userRepository.save(userMapper.modelToEntity(user));
+                        userRepository.save(userMapper.modelToEntity(myUser));
 
                     } catch (Throwable t) {
                         transactionStatus.setRollbackOnly();

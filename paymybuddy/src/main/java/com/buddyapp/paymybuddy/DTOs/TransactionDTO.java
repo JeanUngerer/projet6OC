@@ -1,6 +1,6 @@
 package com.buddyapp.paymybuddy.DTOs;
 
-import com.buddyapp.paymybuddy.models.User;
+import com.buddyapp.paymybuddy.models.MyUser;
 import lombok.*;
 
 @Setter
@@ -13,6 +13,6 @@ public class TransactionDTO {
     Double amount;
     Double fee;
     String description;
-    User trader;
-    User user;
+    MyUser trader;
+    MyUser myUser;
 }

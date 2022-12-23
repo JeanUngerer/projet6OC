@@ -2,7 +2,6 @@ package com.buddyapp.paymybuddy.DTOs;
 
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.Transaction;
-import com.buddyapp.paymybuddy.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +22,8 @@ public class UserDTO {
     String firstName;
     String lastName;
     String phoneNumber;
+    String roles;
     Double balance;
     List<Contact> contacts;
-    //List<User> contactsOf;
     List<Transaction> transactions;
 }

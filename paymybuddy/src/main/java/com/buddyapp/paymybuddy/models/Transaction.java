@@ -12,6 +12,6 @@ public class Transaction {
     Double amount;
     Double fee;
     String description;
-    User trader;
-    User user;
+    MyUser trader;
+    MyUser myUser;
 }

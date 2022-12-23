@@ -3,8 +3,8 @@ package com.buddyapp.paymybuddy.transaction;
 
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
 import com.buddyapp.paymybuddy.models.Contact;
+import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
-import com.buddyapp.paymybuddy.models.User;
 import com.buddyapp.paymybuddy.transaction.service.TransactionService;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -31,12 +31,12 @@ public class TransactionServiceTest {
     public void sendTransactionServiceTest(){
         Double FeesRate = 0.05;
 
-        User applicationReceiver = userService.createUser(new UserDTO(1L, "Admin@mail.com","passAdmin", "AdminPayed",
-                "AdminPayed", "0000000000", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-        User sender = userService.createUser(new UserDTO(4L, "mail3@mail.com","pass3", "firsteName3",
-                "lastName3", "0303030303", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-        User trader = userService.createUser(new UserDTO(5L, "mail4@mail.com","pass4", "firsteName4",
-                "lastName4", "0404040404", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser applicationReceiver = userService.createUser(new UserDTO(1L, "Admin@mail.com","passAdmin", "AdminPayed",
+                "AdminPayed", "0000000000", "ROLE_ADMIN", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser sender = userService.createUser(new UserDTO(4L, "mail3@mail.com","pass3", "firsteName3",
+                "lastName3", "0303030303", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser trader = userService.createUser(new UserDTO(5L, "mail4@mail.com","pass4", "firsteName4",
+                "lastName4", "0404040404", "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
 
 

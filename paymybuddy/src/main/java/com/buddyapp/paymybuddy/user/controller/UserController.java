@@ -44,10 +44,11 @@ public class UserController {
         return ResponseEntity.ok(userMapper.modelToDto(userService.createUser(user)));
     }
 
+    /*
     @PostMapping("")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {
         return ResponseEntity.ok(userMapper.modelToDto(userService.updateUser(user)));
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {

@@ -5,23 +5,18 @@ import com.buddyapp.paymybuddy.mappers.TransactionMapper;
 import com.buddyapp.paymybuddy.mappers.TransactionMapperImpl;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.mappers.UserMapperImpl;
+import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
-import com.buddyapp.paymybuddy.models.User;
 import com.buddyapp.paymybuddy.transaction.repository.TransactionRepository;
 import com.buddyapp.paymybuddy.user.repository.UserRepository;
 import com.buddyapp.paymybuddy.user.service.UserService;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.aop.framework.ReflectiveMethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Arrays;
@@ -113,7 +108,7 @@ public class ExampleAspect {
             Object[] arguments = proceedingJoinPoint.getArgs();
             Double gasFee = amount * FEE_RATE;
             Double totalBurn = gasFee + amount;
-            User userInfo = userService.getUserById(transactionToPlay.getUser().getUserId());
+            MyUser myUserInfo = userService.getUserById(transactionToPlay.getMyUser().getUserId());
             transactionToPlay.setFee(gasFee);
             int arglength = arguments.length;
             for (int i = 0; i< arglength; i++){
@@ -124,9 +119,9 @@ public class ExampleAspect {
             }
 
             proceed[0] = proceedingJoinPoint.proceed();
-            userInfo = userService.getUserById(transactionToPlay.getUser().getUserId());
-            userInfo.setBalance(userInfo.getBalance()-gasFee);
-            userRepository.save(userMapper.modelToEntity(userInfo));
+            myUserInfo = userService.getUserById(transactionToPlay.getMyUser().getUserId());
+            myUserInfo.setBalance(myUserInfo.getBalance()-gasFee);
+            userRepository.save(userMapper.modelToEntity(myUserInfo));
 
             return transactionToPlay;
 

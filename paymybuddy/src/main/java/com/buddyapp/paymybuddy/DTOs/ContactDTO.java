@@ -1,6 +1,6 @@
 package com.buddyapp.paymybuddy.DTOs;
 
-import com.buddyapp.paymybuddy.models.User;
+import com.buddyapp.paymybuddy.models.MyUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ContactDTO {
     Long contactId;
-    User user;
-    User friend;
+    MyUser myUser;
+    MyUser friend;
 }

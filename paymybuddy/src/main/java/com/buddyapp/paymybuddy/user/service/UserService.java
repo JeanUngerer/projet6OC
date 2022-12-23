@@ -3,9 +3,8 @@ package com.buddyapp.paymybuddy.user.service;
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
-import com.buddyapp.paymybuddy.helper.CycleAvoidingMappingContext;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
-import com.buddyapp.paymybuddy.models.User;
+import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,19 +27,19 @@ import java.util.List;
 @Transactional
 public class UserService implements UserDetailsService {
 
-    PasswordEncoder passwordEncoder;
+    //PasswordEncoder passwordEncoder;
     UserRepository userRepository;
     UserMapper userMapper;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No user with that email"));
-        User user = userMapper.entityToModel(userEntity);
+        MyUser myUser = userMapper.entityToModel(userEntity);
         // TODO add here a list of role if needed to do authorization
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(), new ArrayList<>());
     }
 
-    public List<User> getUsers() {
+    public List<MyUser> getUsers() {
         try {
             List<UserEntity> users = userRepository.findAll();
             return userMapper.entitiesToModel(users);
@@ -52,19 +50,20 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User createUser(UserDTO dto) {
+    public MyUser createUser(UserDTO dto) {
         try {
-            User user = userMapper.dtoToModel(dto);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(userMapper.modelToEntity(user));
-            user = userMapper.entityToModel(userRepository.findByEmail(user.getEmail()).get());
-            return user;
+            MyUser myUser = userMapper.dtoToModel(dto);
+            myUser.setPassword(/*passwordEncoder.encode(*/myUser.getPassword()/*)*/);
+            userRepository.save(userMapper.modelToEntity(myUser));
+            myUser = userMapper.entityToModel(userRepository.findByEmail(myUser.getEmail()).get());
+            return myUser;
         } catch (Exception e) {
             log.error("Couldn't create user: " + e.getMessage());
             throw new ExceptionHandler("We could not create your account");
         }
     }
 
+    /*
     public User updateUser(UserDTO dto) {
         try {
             User user = userMapper.dtoToModel(dto);
@@ -78,9 +77,9 @@ public class UserService implements UserDetailsService {
             log.error("Couldn't update user: " + e.getMessage());
             throw new ExceptionHandler("We could not update your account");
         }
-    }
+    }*/
 
-    public User getUserById(Long id) {
+    public MyUser getUserById(Long id) {
         try {
             return userMapper.entityToModel(userRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account")));
@@ -90,7 +89,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User getUserByEmail(String email) {
+    public MyUser getUserByEmail(String email) {
         try {
             return userMapper.entityToModel(userRepository.findByEmail(email).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account")));
@@ -116,9 +115,9 @@ public class UserService implements UserDetailsService {
         try {
             UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
-            User user = userMapper.entityToModel(userEntity);
-            user.setBalance(user.getBalance() + amount);
-            userRepository.save(userMapper.modelToEntity(user));
+            MyUser myUser = userMapper.entityToModel(userEntity);
+            myUser.setBalance(myUser.getBalance() + amount);
+            userRepository.save(userMapper.modelToEntity(myUser));
         } catch (Exception e) {
             log.error("Couldn't find insertFundIntoApp: " + e.getMessage());
             throw new ExceptionHandler("We could not put your fund in your account");

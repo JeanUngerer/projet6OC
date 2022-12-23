@@ -38,6 +38,9 @@ public class UserEntity {
     @Column(name = "phone_number", unique = false, nullable = false, length = 15)
     String phoneNumber;
 
+    @Column(name = "role", nullable = false)
+    String roles;
+
     @Column(name = "balance", nullable = false, length = 10)
     Double balance;
 
@@ -47,20 +50,4 @@ public class UserEntity {
     @OneToMany(mappedBy = "transactionId")
     List<TransactionEntity> transactions;
 
-    /*
-    @ManyToMany
-    @JoinTable(name="tbl_contacts",
-            joinColumns=@JoinColumn(name="friendId"),
-            inverseJoinColumns=@JoinColumn(name="personId")
-    )
-    List<UserEntity> contacts;
-
-    @ManyToMany
-    @JoinTable(name="tbl_contacts",
-            joinColumns=@JoinColumn(name="personId"),
-            inverseJoinColumns=@JoinColumn(name="friendId")
-    )
-    List<UserEntity> contactsOf;
-
-     */
 }

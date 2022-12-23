@@ -3,24 +3,21 @@ package com.buddyapp.paymybuddy.transaction;
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.Transaction;
-import com.buddyapp.paymybuddy.models.User;
+import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.containsString;
+import static com.buddyapp.paymybuddy.utils.ObjectAsJsonStrings.asJsonString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -45,10 +42,10 @@ public class TransactionControllerTest {
     @Test
     public void sendTransactionAPI() throws Exception
     {
-        User sender = userService.createUser(new UserDTO(2L, "mail1@mail.com","pass1", "firsteName1",
-                "lastName1", "0101010101", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-        User trader = userService.createUser(new UserDTO(3L, "mail2@mail.com","pass2", "firsteName2",
-                "lastName2", "0202020202", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser sender = userService.createUser(new UserDTO(2L, "mail1@mail.com","pass1", "firsteName1",
+                "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser trader = userService.createUser(new UserDTO(3L, "mail2@mail.com","pass2", "firsteName2",
+                "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
         String requestJson = "{ \"transactionId\":1, \"amount\":100.0, \"description\":\"testTransaction for 100\", " +
                 "\"trader\":{\"userId\":3, \"email\":\"mail2@mail.com\", \"password\":\"$2a$10$7TWG.9Qo00cX6erxlMf1MOrPxCCc3o7jZpl4QpC9fBwyNG5..pNz6\", " +
@@ -75,10 +72,10 @@ public class TransactionControllerTest {
     @Test
     public void dummyTestAPI() throws Exception{
 
-        User sender = userService.createUser(new UserDTO(4L, "mail3@mail.com","pass3", "firsteName3",
-                "lastName3", "0303030303", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-        User trader = userService.createUser(new UserDTO(5L, "mail4@mail.com","pass4", "firsteName4",
-                "lastName4", "0404040404", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser sender = userService.createUser(new UserDTO(4L, "mail3@mail.com","pass3", "firsteName3",
+                "lastName3", "0303030303", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+        MyUser trader = userService.createUser(new UserDTO(5L, "mail4@mail.com","pass4", "firsteName4",
+                "lastName4", "0404040404", "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
         String requestJson = "{ \"transactionId\":1, \"amount\":100.0, \"description\":\"testTransaction for 100\", " +
                 "\"trader\":{\"userId\":3, \"email\":\"mail2@mail.com\", \"password\":\"$2a$10$7TWG.9Qo00cX6erxlMf1MOrPxCCc3o7jZpl4QpC9fBwyNG5..pNz6\", " +
@@ -100,11 +97,5 @@ public class TransactionControllerTest {
 
     }
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }

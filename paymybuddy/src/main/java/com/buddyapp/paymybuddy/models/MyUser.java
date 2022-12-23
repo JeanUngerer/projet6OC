@@ -12,13 +12,14 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class MyUser {
     Long userId;
     String email;
     String password;
     String firstName;
     String lastName;
     String phoneNumber;
+    String roles;
     Double balance;
     List<Contact> contacts;
     //List<User> contactsOf;
