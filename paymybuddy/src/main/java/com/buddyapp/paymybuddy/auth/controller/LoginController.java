@@ -47,6 +47,12 @@ public class LoginController {
         return "Welcome User";
     }
 
+    @RequestMapping("/authi")
+    public String getAuthi() {
+        log.info("Authi");
+        return "Welcome AUthi";
+    }
+
     //@PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/admin")
     public String getAdmin() {

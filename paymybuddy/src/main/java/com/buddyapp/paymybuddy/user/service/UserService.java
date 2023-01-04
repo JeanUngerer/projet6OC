@@ -10,14 +10,19 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -27,7 +32,8 @@ import java.util.List;
 @Transactional
 public class UserService implements UserDetailsService {
 
-    //PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
     UserRepository userRepository;
     UserMapper userMapper;
 
@@ -35,8 +41,10 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No user with that email"));
         MyUser myUser = userMapper.entityToModel(userEntity);
+        List<SimpleGrantedAuthority> authi = new ArrayList<>();
+        authi.add(new SimpleGrantedAuthority(myUser.getRoles()));
         // TODO add here a list of role if needed to do authorization
-        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(), authi);
     }
 
     public List<MyUser> getUsers() {
@@ -53,7 +61,7 @@ public class UserService implements UserDetailsService {
     public MyUser createUser(UserDTO dto) {
         try {
             MyUser myUser = userMapper.dtoToModel(dto);
-            myUser.setPassword(/*passwordEncoder.encode(*/myUser.getPassword()/*)*/);
+            myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
             userRepository.save(userMapper.modelToEntity(myUser));
             myUser = userMapper.entityToModel(userRepository.findByEmail(myUser.getEmail()).get());
             return myUser;

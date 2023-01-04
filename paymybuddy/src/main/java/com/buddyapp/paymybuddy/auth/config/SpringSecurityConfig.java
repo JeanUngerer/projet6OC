@@ -2,6 +2,7 @@ package com.buddyapp.paymybuddy.auth.config;
 
 
 import com.buddyapp.paymybuddy.auth.service.JpaUserDetailsService;
+import com.buddyapp.paymybuddy.user.service.UserService;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
@@ -12,11 +13,16 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -43,9 +49,9 @@ public class SpringSecurityConfig {
 
     private final  RsaKeyProperties rsaKeys;
 
-    private final JpaUserDetailsService myUserDetailsService;
+    private final UserService myUserDetailsService;
 
-    public SpringSecurityConfig(PasswordEncoder encoder, RsaKeyProperties rsaKeys, JpaUserDetailsService myUserDetailsService) {
+    public SpringSecurityConfig(PasswordEncoder encoder, RsaKeyProperties rsaKeys, UserService myUserDetailsService) {
         this.encoder = encoder;
         this.rsaKeys = rsaKeys;
         this.myUserDetailsService = myUserDetailsService;
@@ -58,16 +64,17 @@ public class SpringSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home").permitAll()
-                                .requestMatchers("/admin").hasRole("ADMIN")
-                                .requestMatchers("/user").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/admin").hasRole("ROLE_ADMIN")
+                        .requestMatchers("/user").hasAnyRole("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
 
                         )
+                //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .userDetailsService(myUserDetailsService)
-                .formLogin(withDefaults())
-                .oauth2Login(withDefaults())
-                .httpBasic(withDefaults())
+              //  .formLogin(withDefaults())
+            //    .oauth2Login(withDefaults())
+                 .httpBasic(withDefaults())
                 .build();
     }
 
@@ -84,11 +91,11 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    InMemoryUserDetailsManager usersManager(){
+    public UserDetailsService userDetailsService() {
         return new InMemoryUserDetailsManager(
                 User.withUsername("jean")
-                        .password(encoder.encode("password"))
-                        .roles("ADMIN")
+                        .password("password")
+                        .authorities("ROLE_ADMIN")
                         .build()
         );
     }

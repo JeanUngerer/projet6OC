@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc(addFilters = true)
 public class AuthControllerTest {
 
     @Autowired
@@ -39,6 +41,36 @@ public class AuthControllerTest {
     @BeforeAll
     public static void prepareDB(){
 
+    }
+
+    @Test
+    void rootWhenUnauthenticatedThen401() throws Exception {
+        this.mockMvc.perform(get("/user"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
+
+        MyUser sender = userService.createUser(new UserDTO(2L, "mail1@mail.com","pass1", "firsteName1",
+                "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+
+        MvcResult result = this.mockMvc.perform(post("/token")
+                        .with(httpBasic("mail1@mail.com", "pass1")))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String token = result.getResponse().getContentAsString();
+
+        this.mockMvc.perform(get("/user")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(content().string("Welcome user"));
+    }
+
+    @Test
+    @WithMockUser
+    public void rootWithMockUserStatusIsOK() throws Exception {
+        this.mockMvc.perform(get("/home")).andExpect(status().isOk());
     }
 
 
