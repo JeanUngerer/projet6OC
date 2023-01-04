@@ -64,16 +64,12 @@ public class SpringSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home").permitAll()
-                        .requestMatchers("/admin").hasRole("ROLE_ADMIN")
-                        .requestMatchers("/user").hasAnyRole("ROLE_USER", "ROLE_ADMIN")
                         .anyRequest().authenticated()
 
                         )
                 //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .userDetailsService(myUserDetailsService)
-              //  .formLogin(withDefaults())
-            //    .oauth2Login(withDefaults())
                  .httpBasic(withDefaults())
                 .build();
     }

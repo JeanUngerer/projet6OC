@@ -53,10 +53,10 @@ public class AuthControllerTest {
     void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
 
         MyUser sender = userService.createUser(new UserDTO(2L, "mail1@mail.com","pass1", "firsteName1",
-                "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+                "lastName1", "0101010101", "ROLE_ADMIN", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
         MvcResult result = this.mockMvc.perform(post("/token")
-                        .with(httpBasic("mail1@mail.com", "pass1")))
+                        .with(httpBasic(sender.getEmail(), "pass1")))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -64,7 +64,7 @@ public class AuthControllerTest {
 
         this.mockMvc.perform(get("/user")
                         .header("Authorization", "Bearer " + token))
-                .andExpect(content().string("Welcome user"));
+                .andExpect(content().string("Welcome User"));
     }
 
     @Test
@@ -73,20 +73,4 @@ public class AuthControllerTest {
         this.mockMvc.perform(get("/home")).andExpect(status().isOk());
     }
 
-
-    //@Test
-    public void loginAPI() throws Exception
-    {
-        MyUser sender = userService.createUser(new UserDTO(2L, "mail1@mail.com","pass1", "firsteName1",
-                "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-
-
-
-        ResultActions result = mockMvc
-                .perform(formLogin("/login").user("mail1@mail.com").password("pass1"))
-                .andDo(print())
-                .andExpect(status().isOk());
-
-        System.out.println(result);
-    }
 }

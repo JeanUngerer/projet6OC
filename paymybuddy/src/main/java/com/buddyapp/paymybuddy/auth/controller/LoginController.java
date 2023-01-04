@@ -3,6 +3,7 @@ package com.buddyapp.paymybuddy.auth.controller;
 
 import com.buddyapp.paymybuddy.auth.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class LoginController {
         return "Home sweet home";
     }
 
-    //@PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN')")
     @RequestMapping("/user")
     public String getUser() {
         log.info("User");
@@ -53,7 +54,7 @@ public class LoginController {
         return "Welcome AUthi";
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @RequestMapping("/admin")
     public String getAdmin() {
         log.info("ADMIN");
