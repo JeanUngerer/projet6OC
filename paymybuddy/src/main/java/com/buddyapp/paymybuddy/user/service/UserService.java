@@ -1,6 +1,7 @@
 package com.buddyapp.paymybuddy.user.service;
 
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
+import com.buddyapp.paymybuddy.constants.Provider;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +68,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         try {
             MyUser myUser = userMapper.dtoToModel(dto);
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+            myUser.setProvider(String.valueOf(Provider.LOCAL));
             userRepository.save(userMapper.modelToEntity(myUser));
             myUser = userMapper.entityToModel(userRepository.findByEmail(myUser.getEmail()).get());
             return myUser;
@@ -139,6 +142,21 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         return null;
+    }
+
+    public void processOAuthPostLogin(String username, String email) {
+        Optional<UserEntity> potentialUser = userRepository.findByEmail(email);
+
+        if (potentialUser.isEmpty()) {
+            MyUser newUser = new MyUser();
+            newUser.setEmail(email);
+            newUser.setLastName(username);
+            newUser.setRoles("ROLE_USER");
+            newUser.setProvider(String.valueOf(Provider.GITHUB));
+
+            userRepository.save(userMapper.modelToEntity(newUser));
+        }
+
     }
 
 //    public String getRoleAccordingToJWT(JwtChecks JWT) {

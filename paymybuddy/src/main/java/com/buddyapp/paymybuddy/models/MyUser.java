@@ -2,6 +2,7 @@ package com.buddyapp.paymybuddy.models;
 
 
 import lombok.*;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MyUser {
     Long userId;
+    String provider;
     String email;
     String password;
     String firstName;

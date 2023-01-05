@@ -1,5 +1,6 @@
 package com.buddyapp.paymybuddy.entities;
 
+import com.buddyapp.paymybuddy.constants.Provider;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", unique = true, nullable = false)
     Long userId;
+
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
 
     @Column(name = "email", unique = true, nullable = false, length = 50)
     String email;

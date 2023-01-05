@@ -1,7 +1,7 @@
 server:
   port: 8090
   servlet:
-    context-path: /api/
+    context-path:
 spring:
   security:
     oauth2:
@@ -10,6 +10,9 @@ spring:
           github:
             client-id: fea08f772bb001a15162
             client-secret: b6daab70e9336fa7d9d994ae9dd004b6a41d8c00
+            scope:
+              - email
+              - name
   jpa:
     generate-ddl: true
     show-sql: true
@@ -18,7 +21,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/pay_my_buddy
     username: root
-    password: admin1
+    password: admin
 
 rsa:
   private-key: classpath:certs/private.pem
