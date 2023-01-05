@@ -29,11 +29,11 @@ public class PaymybuddyApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(UserRepository users, PasswordEncoder encoder) {
 		return args -> {
-			users.save(new UserEntity(1L, Provider.LOCAL, "mailadmin.com",encoder.encode("password"),"firstName" ,
+			users.save(new UserEntity(null, Provider.LOCAL, "mailadmin.com", "usernameAdmin", encoder.encode("password"),"firstName" ,
 					"lastName", "0606060606", "ROLE_ADMIN", 1000.,
 					new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
-			users.save(new UserEntity(2L, Provider.LOCAL, "mailuser.com",encoder.encode("password"),"firstNameU" ,
+			users.save(new UserEntity(null, Provider.LOCAL,  "mailuser.com", "usernameUser", encoder.encode("password"),"firstNameU" ,
 					"lastNameU", "0606060606", "ROLE_USER", 1000.,
 					new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 

@@ -2,7 +2,7 @@ package com.buddyapp.paymybuddy.auth.config;
 
 
 import com.buddyapp.paymybuddy.auth.service.CustomOAuth2UserService;
-import com.buddyapp.paymybuddy.auth.service.JpaUserDetailsService;
+import com.buddyapp.paymybuddy.auth.service.Oauth2LoginHandler;
 import com.buddyapp.paymybuddy.models.CustomOAuth2User;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import com.nimbusds.jose.jwk.JWK;
@@ -56,19 +56,19 @@ public class SpringSecurityConfig {
 
     private final PasswordEncoder encoder;
 
-    private final  RsaKeyProperties rsaKeys;
-
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private Oauth2LoginHandler handler;
+
     private final UserService myUserDetailsService;
 
     public SpringSecurityConfig(PasswordEncoder encoder, RsaKeyProperties rsaKeys, UserService myUserDetailsService) {
         this.encoder = encoder;
-        this.rsaKeys = rsaKeys;
         this.myUserDetailsService = myUserDetailsService;
     }
 
@@ -93,11 +93,9 @@ public class SpringSecurityConfig {
                       //  .and()
                         .successHandler((request, response, authentication) -> {
 
-                            CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+                            handler.onAuthenticationSuccess(request, response, authentication);
 
-                            userService.processOAuthPostLogin(oauthUser.getName(),  oauthUser.getEmail());
-
-                            response.sendRedirect("/home");
+                            //response.setHeader("Authorisation", "token");
                         })
                         .failureHandler((request, response, exception) -> {
                             request.getSession().setAttribute("error.message", exception.getMessage());
@@ -108,26 +106,6 @@ public class SpringSecurityConfig {
                 .build();
     }
 
-    @Bean
-    JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
-    }
 
-    @Bean
-    JwtEncoder jwtEncoder(){
-        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
-        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwks);
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("jean")
-                        .password("password")
-                        .authorities("ROLE_ADMIN")
-                        .build()
-        );
-    }
 
 }

@@ -31,11 +31,11 @@ public class TransactionServiceTest {
     public void sendTransactionServiceTest(){
         Double FeesRate = 0.05;
 
-        MyUser applicationReceiver = userService.createUser(new UserDTO(1L, "Admin@mail.com","passAdmin", "AdminPayed",
+        MyUser applicationReceiver = userService.createUser(new UserDTO( "Admin@mail.com", "useradmin","passAdmin", "AdminPayed",
                 "AdminPayed", "0000000000", "ROLE_ADMIN", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-        MyUser sender = userService.createUser(new UserDTO(4L, "mail3@mail.com","pass3", "firsteName3",
+        MyUser sender = userService.createUser(new UserDTO( "mail3@mail.com", "user3", "pass3", "firsteName3",
                 "lastName3", "0303030303", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-        MyUser trader = userService.createUser(new UserDTO(5L, "mail4@mail.com","pass4", "firsteName4",
+        MyUser trader = userService.createUser(new UserDTO( "mail4@mail.com", "user4", "pass4", "firsteName4",
                 "lastName4", "0404040404", "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
 

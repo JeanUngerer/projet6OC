@@ -17,6 +17,7 @@ public class MyUser {
     Long userId;
     String provider;
     String email;
+    String userName;
     String password;
     String firstName;
     String lastName;

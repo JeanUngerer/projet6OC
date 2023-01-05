@@ -44,8 +44,8 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("No user with that email"));
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByUserName(userName).orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
         MyUser myUser = userMapper.entityToModel(userEntity);
         List<SimpleGrantedAuthority> authi = new ArrayList<>();
         authi.add(new SimpleGrantedAuthority(myUser.getRoles()));
@@ -70,7 +70,21 @@ public class UserService implements UserDetailsService, OAuth2UserService {
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
             myUser.setProvider(String.valueOf(Provider.LOCAL));
             userRepository.save(userMapper.modelToEntity(myUser));
-            myUser = userMapper.entityToModel(userRepository.findByEmail(myUser.getEmail()).get());
+            myUser = userMapper.entityToModel(userRepository.findByUserName(myUser.getUserName()).get());
+            return myUser;
+        } catch (Exception e) {
+            log.error("Couldn't create user: " + e.getMessage());
+            throw new ExceptionHandler("We could not create your account");
+        }
+    }
+
+    public MyUser createOauth2User (UserDTO dto, Provider provider){
+        try {
+            MyUser myUser = userMapper.dtoToModel(dto);
+            myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+            myUser.setProvider(String.valueOf(provider));
+            userRepository.save(userMapper.modelToEntity(myUser));
+            myUser = userMapper.entityToModel(userRepository.findByUserName(myUser.getUserName()).get());
             return myUser;
         } catch (Exception e) {
             log.error("Couldn't create user: " + e.getMessage());
@@ -114,6 +128,16 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         }
     }
 
+    public MyUser getUserByUserName(String userName) {
+        try {
+            return userMapper.entityToModel(userRepository.findByUserName(userName).orElseThrow(()
+                    -> new ExceptionHandler("We could not find your account")));
+        } catch (Exception e) {
+            log.error("Couldn't find user: " + e.getMessage());
+            throw new ExceptionHandler("We could not find your account");
+        }
+    }
+
     public String deleteUser(Long id) {
         try {
             UserEntity userEntity = userRepository.findById(id).orElseThrow(()
@@ -143,34 +167,4 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         return null;
     }
-
-    public void processOAuthPostLogin(String username, String email) {
-        Optional<UserEntity> potentialUser = userRepository.findByEmail(email);
-
-        if (potentialUser.isEmpty()) {
-            MyUser newUser = new MyUser();
-            newUser.setEmail(email);
-            newUser.setLastName(username);
-            newUser.setRoles("ROLE_USER");
-            newUser.setProvider(String.valueOf(Provider.GITHUB));
-
-            userRepository.save(userMapper.modelToEntity(newUser));
-        }
-
-    }
-
-//    public String getRoleAccordingToJWT(JwtChecks JWT) {
-//
-//        if (JWT.getToken() != null && JWT.getToken().startsWith("Bearer ")) {
-//
-//            String token = JWT.getToken().substring("Bearer ".length());
-//            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-//            JWTVerifier verifier = com.auth0.jwt.JWT.require(algorithm).build();
-//            DecodedJWT decodedJWT = verifier.verify(token);
-//            String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
-//            return roles[0];
-//        } else {
-//            return "authNeeded";
-//        }
-//    }
 }

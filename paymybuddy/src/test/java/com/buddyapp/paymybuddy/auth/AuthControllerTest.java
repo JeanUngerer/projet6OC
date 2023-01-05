@@ -52,19 +52,19 @@ public class AuthControllerTest {
     @Test
     void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
 
-        MyUser sender = userService.createUser(new UserDTO(2L, "mail1@mail.com","pass1", "firsteName1",
+        MyUser sender = userService.createUser(new UserDTO( "mailHello@mail.com", "hello1", "pass1", "firsteName1",
                 "lastName1", "0101010101", "ROLE_ADMIN", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
         MvcResult result = this.mockMvc.perform(post("/token")
-                        .with(httpBasic(sender.getEmail(), "pass1")))
+                        .with(httpBasic(sender.getUserName(), "pass1")))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String token = result.getResponse().getContentAsString();
+        String token = result.getResponse().getHeader("Authentication");
 
         this.mockMvc.perform(get("/user")
                         .header("Authorization", "Bearer " + token))
-                .andExpect(content().string("Welcome User"));
+                .andExpect(content().string("Welcome hello1"));
     }
 
     @Test
