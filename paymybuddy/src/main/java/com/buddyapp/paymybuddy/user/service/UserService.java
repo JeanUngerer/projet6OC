@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         List<SimpleGrantedAuthority> authi = new ArrayList<>();
         authi.add(new SimpleGrantedAuthority(myUser.getRoles()));
         // TODO add here a list of role if needed to do authorization
-        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(), authi);
+        return new org.springframework.security.core.userdetails.User(myUser.getUserName(), myUser.getPassword(), authi);
     }
 
     public List<MyUser> getUsers() {
