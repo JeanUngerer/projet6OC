@@ -31,6 +31,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -38,6 +40,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,6 +60,10 @@ public class SpringSecurityConfig {
     private static List<String> clients = Arrays.asList("github");
 
     private final PasswordEncoder encoder;
+
+    @Autowired
+    private OAuth2AuthorizedClientService authorizedClientService;
+
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
@@ -88,6 +97,8 @@ public class SpringSecurityConfig {
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
                 .oauth2Login(oauth -> oauth
+                        .tokenEndpoint(authentication -> handler.generateToken())
+                        //.accessTokenResponseClient()
                         //.userInfoEndpoint()
                        // .userService(customOAuth2UserService)
                       //  .and()
@@ -106,6 +117,11 @@ public class SpringSecurityConfig {
                 .build();
     }
 
-
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
+    }
 
 }

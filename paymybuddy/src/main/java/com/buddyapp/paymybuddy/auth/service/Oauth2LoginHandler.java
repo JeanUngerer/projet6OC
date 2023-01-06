@@ -47,4 +47,8 @@ public class Oauth2LoginHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, Exception exception) {
 
     }
+
+    public String generateToken() {
+        return "token";
+    }
 }
