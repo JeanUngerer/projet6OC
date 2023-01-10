@@ -6,18 +6,22 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './component/login/login.component';
 import { TopNavComponent } from './component/layout/top-nav/top-nav.component';
 import {HttpClientModule} from "@angular/common/http";
+import {ReactiveFormsModule} from "@angular/forms";
+import { ErrorMessageComponent } from './shared/components/error-message/error-message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    TopNavComponent
+    TopNavComponent,
+    ErrorMessageComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        ReactiveFormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
