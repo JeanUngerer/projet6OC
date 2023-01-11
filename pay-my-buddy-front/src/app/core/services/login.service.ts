@@ -24,6 +24,7 @@ const httpText = {
 export class LoginService {
 
   constructor(private http: HttpClient) {
+
   }
   connectGithub() : Observable<any>{
     return this.http.get<any>(
@@ -32,4 +33,9 @@ export class LoginService {
 
   }
 
+  connectPage() {
+    return this.http.get<any>(
+      `http://localhost:8090/login`,
+      httpOptions);
+  }
 }

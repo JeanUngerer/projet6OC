@@ -29,7 +29,7 @@ public class LoginController {
         log.debug("Token granted : " + token);
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Authentication", token);
+        responseHeaders.set("Token", token);
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)

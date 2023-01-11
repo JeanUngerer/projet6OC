@@ -85,10 +85,12 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/login").permitAll()
+                        //.requestMatchers("/token").permitAll()
                         .anyRequest().authenticated()
 
                         )
@@ -97,7 +99,7 @@ public class SpringSecurityConfig {
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
                 .oauth2Login(oauth -> oauth
-                        .tokenEndpoint(authentication -> handler.generateToken())
+                        //.tokenEndpoint(authentication -> handler.generateToken())
                         //.accessTokenResponseClient()
                         //.userInfoEndpoint()
                        // .userService(customOAuth2UserService)

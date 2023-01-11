@@ -31,6 +31,7 @@ public class Oauth2LoginHandler {
 
         try{
             userService.getUserByUserName(userName);
+            SetResponse(response, token);
             return;
 
         } catch (Exception e){
@@ -39,13 +40,15 @@ public class Oauth2LoginHandler {
         userService.createOauth2User(new UserDTO("NoMail goten from " + userName, userName,"No auth via password for " + userName, null,
                 null, null, authentication.getAuthorities().toString(), 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GITHUB);
 
-
-
-        response.setHeader("Authorisation", token);
+        SetResponse(response, token);
     }
 
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, Exception exception) {
 
+    }
+
+    private void SetResponse(HttpServletResponse response, String token) {
+        response.setHeader("Token", token);
     }
 
     public String generateToken() {

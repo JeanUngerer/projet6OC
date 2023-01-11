@@ -25,7 +25,6 @@ import java.util.Optional;
 import static com.buddyapp.paymybuddy.constants.FeesRate.FEE_RATE;
 
 @Aspect
-//@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Component
 public class ExampleAspect {
 
@@ -69,40 +68,7 @@ public class ExampleAspect {
         return transactionPlayed;
     }
 
-    /*
-    @Before("@annotation(TransactionFee)")
-    public Object transactionFeeBefore(JoinPoint joinPoint) throws Throwable {
-        Optional<Transaction> otionnalTransactionToPlay = Arrays.stream(joinPoint.getArgs()).filter(obj -> obj instanceof Transaction).map(obj -> (Transaction) obj).findFirst();
-        if (!otionnalTransactionToPlay.isPresent()){
-            throw new ExceptionHandler("No transaction in function argument");
-        }
-
-        final Object[] proceed = new Object[1];
-
-        return proceed[0];
-    }
-
-    @AfterReturning(value = "@annotation(TransactionFee)", returning = "returnObject")
-    public void transactionFeeAfter(JoinPoint joinPoint, Object returnObject){
-
-        Optional<Transaction> otionnalTransactionToPlay = Arrays.stream(joinPoint.getArgs()).filter(obj -> obj instanceof Transaction).map(obj -> (Transaction) obj).findFirst();
-        if (!otionnalTransactionToPlay.isPresent()){
-            throw new ExceptionHandler("No transaction in function argument");
-        }
-        Transaction transactionToPlay = otionnalTransactionToPlay.get();
-
-        Double amount = transactionToPlay.getAmount();
-
-        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-
-        transactionTemplate.execute((transactionStatus) -> {
-            doInTransaction(transactionStatus, amount, transactionToPlay);
-
-            return null;
-        });
-    }*/
-
-    public Transaction doInTransaction(TransactionStatus transactionStatus, Double amount, Transaction transactionToPlay, ProceedingJoinPoint proceedingJoinPoint) {
+    private Transaction doInTransaction(TransactionStatus transactionStatus, Double amount, Transaction transactionToPlay, ProceedingJoinPoint proceedingJoinPoint) {
         try {
             final Object[] proceed = new Object[1];
             Object[] arguments = proceedingJoinPoint.getArgs();

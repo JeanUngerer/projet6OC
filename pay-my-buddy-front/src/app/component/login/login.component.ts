@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { LoginService} from "../../core/services/login.service";
 
 @Component({
   selector: 'app-login',
@@ -17,10 +18,15 @@ export class LoginComponent implements OnInit {
     email: this.emailControl,
     password: this.passwordControl,
   });
+
+  loginPage: any = null;
+
+  displayLoginPage: boolean = false;
   hasAuthError: boolean = false;
   constructor(
     private router: Router,
     private authService: AuthService,
+    private loginService: LoginService,
   ) {}
   ngOnInit(): void {
 
@@ -78,4 +84,10 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password')?.value;
   }
+
+  logGithub(){
+    const res = this.loginService.connectGithub().subscribe();
+    console.log("RES : ", res);
+  }
+
 }
