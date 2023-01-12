@@ -6,7 +6,7 @@ import { AuthUser } from '../models/auth.model';
 })
 export class JWTService {
   constructor() {}
-  token_key = 'token_key';
+  token_key = 'pay-my-buddy_token_key';
 
   decodeToken(token: string) {
     return JSON.parse(atob(token.split('.')[1]));
@@ -42,8 +42,9 @@ export class JWTService {
     const token = this.getToken();
     if (token) {
       const decoded = this.decodeToken(token);
+      console.log("Decode : ", decoded );
       return {
-        role: decoded.auth[0].authority as string,
+        role: decoded.scope as string,
         email: decoded.sub as string,
         exp: decoded.exp,
       };

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -23,12 +23,19 @@ export class AuthService {
   }
 
   login({ email, password }: { email: string; password: string }) {
+
     return this.http
-      .post<{ Token: string }>(`${environment.apiUrl}/token`, {
-        username: email,
-        password,
-      })
-      .pipe(tap((r) => this.createSession(r.Token)));
+      .post<any>(`${environment.apiUrl}/token`, null,
+        {
+          headers: new HttpHeaders(
+            {
+              'Authorization': "Basic " + btoa(email + ":" + password)
+            } ),
+          observe: 'response'
+        })//.subscribe({next: r => console.log('RESP : ', r)})
+      .pipe(tap((r) => {console.log("TOKENNN : ", r.headers.get('Token')),
+          this.createSession(r.headers.get('Token'))
+      }));
   }
 
   /**
@@ -44,7 +51,8 @@ export class AuthService {
   /**
    * saves User token and updates observables currentUserSubject and isAuthenticatedSubject
    s  */
-  createSession(token: string) {
+  createSession(token: string | null) {
+    if (token == null){return;}
     const authUser: AuthUser | null = this.jwt.saveUser(token);
     if (authUser) {
       this.currentUserSubject.next(authUser);

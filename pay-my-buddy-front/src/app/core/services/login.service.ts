@@ -28,7 +28,7 @@ export class LoginService {
   }
   connectGithub() : Observable<any>{
     return this.http.get<any>(
-      `http://localhost:8090/login/oauth2/code/github`,
+      `http://localhost:8090/login/oauth2/authorize/github`,
       httpOptions);
 
   }

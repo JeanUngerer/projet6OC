@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { LoginService} from "../../core/services/login.service";
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +12,15 @@ import { LoginService} from "../../core/services/login.service";
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  emailControl = new FormControl('', [Validators.required, Validators.email]);
+  emailControl = new FormControl('', [Validators.required]);
   passwordControl = new FormControl('', Validators.required);
   submitted: boolean = false;
   loginForm = new FormGroup({
     email: this.emailControl,
     password: this.passwordControl,
   });
+
+  checkRemember: boolean = false;
 
   loginPage: any = null;
 
@@ -41,9 +44,9 @@ export class LoginComponent implements OnInit {
       this.authService.login({
         email: this.email ? this.email : '',
         password: this.password ? this.password : '',
-      }).subscribe(
-        (r) => this.handleAuthSuccess(),
-        (err) => this.handleAuthError(err)
+      }).subscribe({
+        next:(r) => {console.log("RESULT : ", r); this.handleAuthSuccess()},
+        error:(err) => this.handleAuthError(err)}
       );
     }
   }
@@ -53,7 +56,7 @@ export class LoginComponent implements OnInit {
    */
   handleAuthSuccess() {
     this.hasAuthError = false;
-    this.router.navigate(['/geo/home']);
+    this.router.navigate(['home']);
   }
 
   /**
@@ -62,6 +65,7 @@ export class LoginComponent implements OnInit {
    */
   handleAuthError(err: any) {
     this.hasAuthError = true;
+    console.log("LOG ERROR : ", err);
   }
 
   hasError(field: string) {

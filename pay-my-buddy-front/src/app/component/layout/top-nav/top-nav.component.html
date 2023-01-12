@@ -1,3 +1,15 @@
 <div class="topnav">
-  <a routerLink="login">Login</a>
+
+  <a routerLink="home">Home</a>
+  <a routerLink="transfer">Transfer</a>
+  <a routerLink="user">My account</a>
+  <a routerLink="contact">Contact</a>
+
+  <a class="logout" routerLink="/login" (click)="handleClickLogout()">
+    <img
+      src="assets/images/logout.svg"
+      alt="logout"
+      class="logout"
+    />
+  </a>
 </div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService} from "../../../core/services/auth.service";
 
 @Component({
   selector: 'app-top-nav',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./top-nav.component.scss']
 })
 export class TopNavComponent {
+
+  constructor(
+
+    private authService: AuthService,
+  ) {}
+
+  handleClickLogout() {
+    this.authService.logout();
+  }
 
 }

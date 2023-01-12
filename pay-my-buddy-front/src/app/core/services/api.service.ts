@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import {JWTService} from "./jwt.service";
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ export class ApiService {
   pipe(arg0: any) {
     throw new Error('Method not implemented.');
   }
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private jwtSerice: JWTService) {}
   headers = {
     'content-type': 'application/json',
   };
@@ -23,7 +25,13 @@ export class ApiService {
 
   get(path: string): Observable<any> {
     return this.http
-      .get(`${environment.apiUrl}${path}`)
+      .get(`${environment.apiUrl}${path}`,
+{
+        headers: new HttpHeaders(
+      {
+        'Authorization': "Bearer " + this.jwtSerice.getToken()
+        })
+      })
       .pipe(catchError(this.formatErrors));
   }
 
