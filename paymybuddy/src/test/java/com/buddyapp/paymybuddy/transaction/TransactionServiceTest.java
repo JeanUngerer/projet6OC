@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class TransactionServiceTest {
 
 
 
-        Transaction transaction = new Transaction(1L, 100.,0., "testTransaction for 100", trader, sender);
+        Transaction transaction = new Transaction(1L, 100.,0., "testTransaction for 100", trader, sender, LocalDateTime.now());
         Double expectedNewBalance = sender.getBalance()-transaction.getAmount()-transaction.getAmount()* FeesRate;
 
         System.out.println("DESCRIPTION LENGTH : " + transaction.getDescription().length());

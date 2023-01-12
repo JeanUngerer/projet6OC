@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Setter
 @Getter
@@ -36,4 +39,7 @@ public class TransactionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     UserEntity user;
+
+    @Column(name = "transaction_date")
+    LocalDateTime date;
 }

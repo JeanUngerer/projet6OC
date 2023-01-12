@@ -89,6 +89,10 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password')?.value;
   }
 
+  register() {
+    this.router.navigate(['register']);
+  }
+
   logGithub(){
     const res = this.loginService.connectGithub().subscribe();
     console.log("RES : ", res);

@@ -25,6 +25,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -86,6 +87,8 @@ public class TransactionService {
 
 
             transaction.setTrader(trader);
+
+            transaction.setDate(LocalDateTime.now());
 
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
 

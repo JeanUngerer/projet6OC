@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static com.buddyapp.paymybuddy.utils.ObjectAsJsonStrings.asJsonString;
@@ -55,7 +56,7 @@ public class TransactionControllerTest {
 
 
 
-        Transaction transaction = new Transaction(1L, 100.,0.,  "testTransaction for 100", trader, sender);
+        Transaction transaction = new Transaction(1L, 100.,0.,  "testTransaction for 100", trader, sender, LocalDateTime.now());
         System.out.println("TRANSACTION OBJECT : " + asJsonString(transaction));
 
         mockMvc.perform(put("/transaction/send")
@@ -84,7 +85,7 @@ public class TransactionControllerTest {
                 "\"firstName\":\"firstName1\", \"lastName\":\"lastName1\", \"phoneNumber\":\"0101010101\", \"balance\":1000.0, \"contacts\":{}, \"transactions\":{}}}";
 
 
-        Transaction transaction = new Transaction(1L, 100.,0., "testTransaction for 100", trader, sender);
+        Transaction transaction = new Transaction(1L, 100.,0., "testTransaction for 100", trader, sender, LocalDateTime.now());
         System.out.println("TRANSACTION OBJECT : " + asJsonString(transaction));
 
         mockMvc.perform(get("/transaction/dummy")

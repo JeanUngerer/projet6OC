@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,36 +25,43 @@ public class UserController {
 
     private UserMapper userMapper;
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> getUsers() {
         return ResponseEntity.ok(userMapper.modelsToDtos(userService.getUsers()));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUsers(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userMapper.modelToDto(userService.getUserById(id)));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/email/{email}")
     public ResponseEntity<UserDTO> getUserByMail(@PathVariable("email") String email) {
         return ResponseEntity.ok(userMapper.modelToDto(userService.getUserByEmail(email)));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PutMapping("/create")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
         return ResponseEntity.ok(userMapper.modelToDto(userService.createUser(user)));
     }
 
-    /*
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO user) {
         return ResponseEntity.ok(userMapper.modelToDto(userService.updateUser(user)));
-    }*/
+    }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
+
+
 
 
 }

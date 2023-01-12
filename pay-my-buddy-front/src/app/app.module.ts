@@ -13,6 +13,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import { UserInfoComponent } from './component/user-info/user-info.component';
 import { TransferComponent } from './component/transfer/transfer.component';
 import { ContactsComponent } from './component/contacts/contacts.component';
+import { RegistrationComponent } from './component/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ContactsComponent } from './component/contacts/contacts.component';
     HomeComponent,
     UserInfoComponent,
     TransferComponent,
-    ContactsComponent
+    ContactsComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

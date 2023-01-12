@@ -19,6 +19,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -90,6 +91,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home").permitAll()
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/register").permitAll()
                         //.requestMatchers("/token").permitAll()
                         .anyRequest().authenticated()
 
@@ -108,7 +110,7 @@ public class SpringSecurityConfig {
 
                             handler.onAuthenticationSuccess(request, response, authentication);
 
-                            //response.setHeader("Authorisation", "token");
+                            //response.setHeader("Token", "token");
                         })
                         .failureHandler((request, response, exception) -> {
                             request.getSession().setAttribute("error.message", exception.getMessage());
@@ -126,6 +128,7 @@ public class SpringSecurityConfig {
         final CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
         configuration.addExposedHeader("Token");
+        configuration.addAllowedMethod(HttpMethod.PUT);
         source.registerCorsConfiguration("/**",configuration);
         return source;
     }

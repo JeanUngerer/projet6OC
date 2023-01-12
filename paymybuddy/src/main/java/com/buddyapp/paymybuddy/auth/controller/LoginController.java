@@ -2,10 +2,9 @@ package com.buddyapp.paymybuddy.auth.controller;
 
 
 import com.buddyapp.paymybuddy.DTOs.MessageDTO;
-import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
+import com.buddyapp.paymybuddy.DTOs.RegistrationDTO;
 import com.buddyapp.paymybuddy.auth.service.TokenService;
-import org.apache.tomcat.util.http.parser.Authorization;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.buddyapp.paymybuddy.user.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,8 +18,11 @@ public class LoginController {
 
     private final TokenService tokenService;
 
-    public LoginController(TokenService tokenService) {
+    private final UserService userService;
+
+    public LoginController(TokenService tokenService, UserService userService) {
         this.tokenService = tokenService;
+        this.userService = userService;
     }
 
     @PostMapping("/token")
@@ -55,6 +57,12 @@ public class LoginController {
         log.info("User");
         return ResponseEntity.ok(new MessageDTO("Hi " + tokenService.decodeTokenUsername(requestTokenHeader)));
 
+    }
+
+    @PutMapping("/register")
+    public ResponseEntity<MessageDTO> register(@RequestBody RegistrationDTO dto){
+        String message = userService.registerUser(dto);
+        return ResponseEntity.ok(new MessageDTO(message));
     }
 
     @RequestMapping("/authi")

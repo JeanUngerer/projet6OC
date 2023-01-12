@@ -1,9 +1,15 @@
 package com.buddyapp.paymybuddy.transaction.controller;
 
+import com.buddyapp.paymybuddy.DTOs.MessageDTO;
+import com.buddyapp.paymybuddy.DTOs.MyTransactionsDTO;
 import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
+import com.buddyapp.paymybuddy.DTOs.TransactionToSendDTO;
+import com.buddyapp.paymybuddy.auth.service.TokenService;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
+import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.transaction.service.TransactionService;
+import com.buddyapp.paymybuddy.user.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,8 +17,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,26 +34,46 @@ public class TransactionController {
 
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    UserService userService;
 
+    @Autowired
+    TokenService tokenService;
+
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/allfrom/{id}")
     public ResponseEntity<List<TransactionDTO>> findAllUserTransactions(@PathVariable("id") Long id) {
         return ResponseEntity.ok(transactionMapper.modelsToDtos(transactionService.findAllUserTransactions(id)));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDTO> findTransactionById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(transactionMapper.modelToDto(transactionService.findTransactionById(id)));
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PutMapping("/send")
-    @RolesAllowed("ADMIN")
-    public ResponseEntity<TransactionDTO> findTransactionById(@RequestBody TransactionDTO dto) {
+    public ResponseEntity<TransactionDTO> createTransaction(@RequestBody TransactionDTO dto) {
         Transaction response = transactionService.sendTransaction(transactionMapper.dtoToModel(dto));
         return ResponseEntity.ok(transactionMapper.modelToDto(response));
     }
 
-    @GetMapping("/dummy")
-    public ResponseEntity<TransactionDTO> dummyController(@RequestBody TransactionDTO dto){
-        return ResponseEntity.ok(dto);
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/sendmoney")
+    public ResponseEntity<MessageDTO> sendMoney(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody TransactionToSendDTO transactionDTO){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+        MyUser target = userService.getUserByUserName(transactionDTO.getSendTo().getUsername());
+        Transaction transaction = new Transaction(null, transactionDTO.getAmount(), 0., "simple transaction", target, me, LocalDateTime.now());
+        transactionService.sendTransaction(transaction);
+        return ResponseEntity.ok(new MessageDTO("Transaction sent to user : " + target.getUserName()));
+    }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/mytransactions")
+    public ResponseEntity<MyTransactionsDTO> getMyTransactions(@RequestHeader("Authorization") String requestTokenHeader){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+        MyTransactionsDTO myTransactions = new MyTransactionsDTO(transactionMapper.transactionsToMyTransactions(me.getTransactions()));
+        return ResponseEntity.ok( myTransactions );
     }
 }

@@ -1,11 +1,18 @@
 package com.buddyapp.paymybuddy.user.service;
 
+import com.buddyapp.paymybuddy.DTOs.ContactDTO;
+import com.buddyapp.paymybuddy.DTOs.RegistrationDTO;
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
 import com.buddyapp.paymybuddy.constants.Provider;
+import com.buddyapp.paymybuddy.entities.ContactEntity;
+import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
+import com.buddyapp.paymybuddy.helper.CycleAvoidingMappingContext;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
+import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.MyUser;
+import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +45,7 @@ import java.util.Optional;
 @Transactional
 public class UserService implements UserDetailsService, OAuth2UserService {
 
-    @Autowired
+
     PasswordEncoder passwordEncoder;
     UserRepository userRepository;
     UserMapper userMapper;
@@ -167,4 +174,28 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         return null;
     }
+
+    public MyUser updateUser(UserDTO dto) {
+        try {
+            MyUser myUser = userMapper.entityToModel(userRepository.findByUserName(dto.getUserName()).orElseThrow(()
+                    -> new ExceptionHandler("We could not find your user")));
+            userMapper.updateUserFromDto(dto, myUser, new CycleAvoidingMappingContext());
+            userRepository.save(userMapper.modelToEntity(myUser));
+            return myUser;
+        } catch (Exception e) {
+            log.error("Couldn't create user: " + e.getMessage());
+            throw new ExceptionHandler("We could not create your user");
+        }
+    }
+
+    public String registerUser(RegistrationDTO registration){
+        UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), passwordEncoder.encode(registration.getPassword()),
+                registration.getFirstname(), registration.getLastname(),null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>());
+        MyUser newMe = createUser(newUser);
+        if(newMe.getUserName().contentEquals(registration.getUsername())){
+            return "Registered";
+        }
+        return "Username issue while registering";
+    }
+
 }

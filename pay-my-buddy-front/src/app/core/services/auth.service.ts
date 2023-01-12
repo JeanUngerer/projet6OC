@@ -5,6 +5,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { AuthUser } from '../models/auth.model';
 import { JWTService } from './jwt.service';
+import {ApiService} from "./api.service";
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,9 @@ export class AuthService {
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient, private jwt: JWTService) {
+  constructor(private http: HttpClient,
+              private jwt: JWTService,
+              private apiService: ApiService) {
     this.isLoggedIn();
   }
 
@@ -32,10 +35,21 @@ export class AuthService {
               'Authorization': "Basic " + btoa(email + ":" + password)
             } ),
           observe: 'response'
-        })//.subscribe({next: r => console.log('RESP : ', r)})
+        })
       .pipe(tap((r) => {console.log("TOKENNN : ", r.headers.get('Token')),
           this.createSession(r.headers.get('Token'))
       }));
+  }
+
+  register ({username, email, password, firstname, lastname}: {username : string, email : string, password : string, firstname : string, lastname : string}){
+    return this.apiService.put(`/register`,
+{
+        username : username,
+        mail : email,
+        password : password,
+        firstname : firstname,
+        lastname : lastname
+    })
   }
 
   /**

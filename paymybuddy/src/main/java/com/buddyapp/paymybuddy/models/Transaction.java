@@ -2,6 +2,8 @@ package com.buddyapp.paymybuddy.models;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @ToString
@@ -14,4 +16,5 @@ public class Transaction {
     String description;
     MyUser trader;
     MyUser myUser;
+    LocalDateTime date;
 }

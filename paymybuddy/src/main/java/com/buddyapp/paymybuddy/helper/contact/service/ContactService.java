@@ -1,12 +1,16 @@
-package com.buddyapp.paymybuddy.contact.service;
+package com.buddyapp.paymybuddy.helper.contact.service;
 
 
 import com.buddyapp.paymybuddy.DTOs.ContactDTO;
-import com.buddyapp.paymybuddy.contact.repository.ContactRepository;
+import com.buddyapp.paymybuddy.DTOs.MyContactsDTO;
+import com.buddyapp.paymybuddy.helper.contact.repository.ContactRepository;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.helper.CycleAvoidingMappingContext;
 import com.buddyapp.paymybuddy.mappers.ContactMapper;
+import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.models.Contact;
+import com.buddyapp.paymybuddy.models.MyUser;
+import com.buddyapp.paymybuddy.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,6 +30,10 @@ public class ContactService {
 
     ContactRepository contactRepository;
     ContactMapper contactMapper;
+
+    UserService userService;
+
+    UserMapper userMapper;
 
     public List<Contact> findAllContact() {
         try {
@@ -82,8 +90,28 @@ public class ContactService {
         }
     }
 
-    public String addContact(String mailAddress) {
-        //TODO using jwt to recognise user
-        return "Done";
+    public void addContactByMail(String mailAddress, MyUser me) {
+        ContactDTO newContact = new ContactDTO(null, me, userService.getUserByEmail(mailAddress));
+        createContact(newContact);
+    }
+
+    public MyContactsDTO getMyContacts(MyUser me) {
+        MyContactsDTO myContacts = new MyContactsDTO(contactMapper.contactsToMyContacts(me.getContacts()));
+        return myContacts;
+    }
+
+    public Contact findContactByUserAndFriend(MyUser me, MyUser friend){
+        Contact contact = contactMapper.entityToModel(contactRepository.findByUserAndFriend(userMapper.modelToEntity(me), userMapper.modelToEntity(friend)).get());
+        return contact;
+    }
+
+    public void addContactByUsername(String username, MyUser me) {
+        ContactDTO newContact = new ContactDTO(null, me, userService.getUserByUserName(username));
+        createContact(newContact);
+    }
+
+    public void removeContactByUsername(String username, MyUser me) {
+        MyUser friend = userService.getUserByUserName(username);
+        deleteContact(findContactByUserAndFriend(me, friend).getContactId());
     }
 }

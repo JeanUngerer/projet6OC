@@ -7,6 +7,7 @@ import {AppComponent} from "./app.component";
 import {UserInfoComponent} from "./component/user-info/user-info.component";
 import {TransferComponent} from "./component/transfer/transfer.component";
 import {ContactsComponent} from "./component/contacts/contacts.component";
+import {RegistrationComponent} from "./component/registration/registration.component";
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent
+  },
+  {
+    path: 'register',
+    component: RegistrationComponent
   },
   {
     path: 'login',

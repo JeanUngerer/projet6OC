@@ -23,4 +23,6 @@ public interface UserMapper {
     List<MyUser> entitiesToModel(List<UserEntity> entities);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromModel(MyUser model, @MappingTarget UserEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+    void updateUserFromDto(UserDTO dto, @MappingTarget MyUser myUser, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 }
