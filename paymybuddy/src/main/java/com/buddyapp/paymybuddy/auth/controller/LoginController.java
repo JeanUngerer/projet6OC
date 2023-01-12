@@ -1,6 +1,7 @@
 package com.buddyapp.paymybuddy.auth.controller;
 
 
+import com.buddyapp.paymybuddy.DTOs.MessageDTO;
 import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
 import com.buddyapp.paymybuddy.auth.service.TokenService;
 import org.apache.tomcat.util.http.parser.Authorization;
@@ -23,7 +24,7 @@ public class LoginController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<String> token(Authentication authentication) {
+    public ResponseEntity<Void> token(Authentication authentication) {
         log.debug("Token requested for user : " + authentication.getName());
         String token = tokenService.generateToken(authentication);
         log.debug("Token granted : " + token);
@@ -33,44 +34,45 @@ public class LoginController {
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)
-                .body("Response with header using ResponseEntity");
+                .build();
     }
 
 
 
     @GetMapping("/*")
-    public String home(){
-        return "Home !";
+    public ResponseEntity<MessageDTO> home(){
+        return ResponseEntity.ok(new MessageDTO("Hi AUthenticated !"));
     }
 
     @GetMapping("/home")
-    public String homeSweetHome(){
-        return "Home sweet home";
+    public ResponseEntity<MessageDTO> homeSweetHome(){
+        return ResponseEntity.ok(new MessageDTO("Hi AUthenticated !"));
     }
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
     @RequestMapping("/user")
-    public String getUser(@RequestHeader("Authorization") String requestTokenHeader) {
+    public ResponseEntity<MessageDTO> getUser(@RequestHeader("Authorization") String requestTokenHeader) {
         log.info("User");
-        return "Welcome " + tokenService.decodeTokenUsername(requestTokenHeader);
+        return ResponseEntity.ok(new MessageDTO("Hi " + tokenService.decodeTokenUsername(requestTokenHeader)));
+
     }
 
     @RequestMapping("/authi")
-    public String getAuthi() {
+    public ResponseEntity<MessageDTO> getAuthi() {
         log.info("Authi");
-        return "Welcome AUthi";
+        return ResponseEntity.ok(new MessageDTO("Hi AUthenticated !"));
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @RequestMapping("/admin")
-    public String getAdmin() {
+    public ResponseEntity<MessageDTO> getAdmin() {
         log.info("ADMIN");
-        return "Welcome Admin";
+        return ResponseEntity.ok(new MessageDTO("Hi Admin !"));
     }
 
     @RequestMapping("/github/*")
-    public String getGithub()
+    public ResponseEntity<MessageDTO> getGithub()
     {
-        return "Welcome Github user!";
+        return ResponseEntity.ok(new MessageDTO("Hi Github !"));
     }
 }

@@ -119,11 +119,16 @@ public class SpringSecurityConfig {
                 .build();
     }
 
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.applyPermitDefaultValues();
+        configuration.addExposedHeader("Token");
+        source.registerCorsConfiguration("/**",configuration);
         return source;
     }
+
 
 }
