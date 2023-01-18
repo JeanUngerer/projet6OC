@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './component/login/login.component';
 import { TopNavComponent } from './component/layout/top-nav/top-nav.component';
 import {HttpClientModule} from "@angular/common/http";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ErrorMessageComponent } from './shared/components/error-message/error-message.component';
 import { HomeComponent } from './component/home/home.component';
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -14,6 +14,10 @@ import { UserInfoComponent } from './component/user-info/user-info.component';
 import { TransferComponent } from './component/transfer/transfer.component';
 import { ContactsComponent } from './component/contacts/contacts.component';
 import { RegistrationComponent } from './component/registration/registration.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatTableModule} from "@angular/material/table";
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { RegistrationComponent } from './component/registration/registration.com
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatTableModule,
+    NgSelectModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

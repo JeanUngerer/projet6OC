@@ -1,1 +1,91 @@
-<p>transfer works!</p>
+
+  <div class="transferModal">
+    <div class="content">
+
+      <label class="mat-card-title">List of transfers</label>
+      <br><br>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="sentTo">
+          <th mat-header-cell *matHeaderCellDef> Sent To </th>
+          <td mat-cell *matCellDef="let element"> {{element.receiverUsername}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> Amount </th>
+          <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+      </table>
+
+      <mat-paginator
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        [pageSize]="10"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+
+      <br><br>
+      <label class="">New Transfer</label>
+      <br><br>
+
+
+      <form class="login-form" [formGroup]="tranferForm" (ngSubmit)="sendMoney()">
+        <div class="form-group">
+          <label class="form-group-label">Send To</label>
+          <ng-select [items]="contactList"
+                     placeholder="Select contact to send money to"
+                     bindLabel="username"
+                     bindValue="username"
+                     [(ngModel)]="selectedFriend"
+                     (change)="resetSubmitted()">
+          </ng-select>
+          <app-error-message
+            [visible]="submitted && hasError('email')"
+            message="Please select a contact"
+          >
+          </app-error-message>
+        </div>
+        <br><br>
+        <label class="form-group-label">Amount</label>
+        <div class="form-group">
+          <input
+            type="number"
+            id="amount"
+            placeholder="Enter amount"
+            class="input"
+            [ngClass]="{
+                  'input-error': hasError('amount')
+                }"
+            formControlName="amount"
+            (change)="resetSubmitted()"
+          />
+          <app-error-message
+            [visible]="submitted && hasError('amount')"
+            message="Please provide a valid amount"
+          >
+          </app-error-message>
+        </div>
+
+        <button class="button login-button button-primary" type="submit">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+

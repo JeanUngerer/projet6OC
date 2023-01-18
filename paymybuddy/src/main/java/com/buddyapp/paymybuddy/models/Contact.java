@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class Contact {
     Long contactId;
-    MyUser myUser;
+    MyUser user;
     MyUser friend;
 
 }

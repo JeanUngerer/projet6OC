@@ -11,7 +11,7 @@ export class UserService {
   constructor(private  apiService: ApiService) { }
 
   isUser(): Observable<any> {
-    return this.apiService.get('/authi');
+    return this.apiService.getNoAuth('/authi');
   }
 
 }

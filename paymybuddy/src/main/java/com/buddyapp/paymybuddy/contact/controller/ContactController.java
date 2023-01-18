@@ -1,11 +1,11 @@
-package com.buddyapp.paymybuddy.helper.contact.controller;
+package com.buddyapp.paymybuddy.contact.controller;
 
 import com.buddyapp.paymybuddy.DTOs.AddContactByMailDTO;
 import com.buddyapp.paymybuddy.DTOs.AddContactByNameDTO;
 import com.buddyapp.paymybuddy.DTOs.ContactDTO;
 import com.buddyapp.paymybuddy.DTOs.MyContactsDTO;
 import com.buddyapp.paymybuddy.auth.service.TokenService;
-import com.buddyapp.paymybuddy.helper.contact.service.ContactService;
+import com.buddyapp.paymybuddy.contact.service.ContactService;
 import com.buddyapp.paymybuddy.mappers.ContactMapper;
 import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.user.service.UserService;
@@ -30,7 +30,6 @@ public class ContactController {
 
     @Autowired
     ContactService contactService;
-
     @Autowired
     UserService userService;
 
@@ -81,7 +80,7 @@ public class ContactController {
     public ResponseEntity<MyContactsDTO> AddContactByMail(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddContactByMailDTO dto){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
         contactService.addContactByMail(dto.getMail(), me);
-        return ResponseEntity.ok(contactService.getMyContacts(me));
+        return ResponseEntity.ok(contactService.getMyContacts(userService.getUserByUserName(me.getUserName())));
     }
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
@@ -89,7 +88,7 @@ public class ContactController {
     public ResponseEntity<MyContactsDTO> addContactByUsername(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddContactByNameDTO dto){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
         contactService.addContactByUsername(dto.getUsername(), me);
-        return ResponseEntity.ok(contactService.getMyContacts(me));
+        return ResponseEntity.ok(contactService.getMyContacts(userService.getUserByUserName(me.getUserName())));
     }
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
@@ -97,7 +96,7 @@ public class ContactController {
     public ResponseEntity<MyContactsDTO> removeContact(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddContactByNameDTO dto){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
         contactService.removeContactByUsername(dto.getUsername(), me);
-        return ResponseEntity.ok(contactService.getMyContacts(me));
+        return ResponseEntity.ok(contactService.getMyContacts(userService.getUserByUserName(me.getUserName())));
     }
 
 

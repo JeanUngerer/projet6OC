@@ -68,7 +68,7 @@ public class LoginController {
     @RequestMapping("/authi")
     public ResponseEntity<MessageDTO> getAuthi() {
         log.info("Authi");
-        return ResponseEntity.ok(new MessageDTO("Hi AUthenticated !"));
+        return ResponseEntity.ok(new MessageDTO("Not AUthenticated !"));
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")

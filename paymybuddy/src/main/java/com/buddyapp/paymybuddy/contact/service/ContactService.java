@@ -1,12 +1,13 @@
-package com.buddyapp.paymybuddy.helper.contact.service;
+package com.buddyapp.paymybuddy.contact.service;
 
 
 import com.buddyapp.paymybuddy.DTOs.ContactDTO;
 import com.buddyapp.paymybuddy.DTOs.MyContactsDTO;
-import com.buddyapp.paymybuddy.helper.contact.repository.ContactRepository;
+import com.buddyapp.paymybuddy.contact.repository.ContactRepository;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.helper.CycleAvoidingMappingContext;
 import com.buddyapp.paymybuddy.mappers.ContactMapper;
+import com.buddyapp.paymybuddy.mappers.CustomMappers;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.MyUser;
@@ -30,6 +31,8 @@ public class ContactService {
 
     ContactRepository contactRepository;
     ContactMapper contactMapper;
+
+    CustomMappers customMapper;
 
     UserService userService;
 
@@ -96,8 +99,9 @@ public class ContactService {
     }
 
     public MyContactsDTO getMyContacts(MyUser me) {
-        MyContactsDTO myContacts = new MyContactsDTO(contactMapper.contactsToMyContacts(me.getContacts()));
-        return myContacts;
+        MyContactsDTO myContactsDTO = new MyContactsDTO();
+        myContactsDTO.setMyContacts(customMapper.contactsToMyContacts(me.getContacts()));
+        return myContactsDTO;
     }
 
     public Contact findContactByUserAndFriend(MyUser me, MyUser friend){

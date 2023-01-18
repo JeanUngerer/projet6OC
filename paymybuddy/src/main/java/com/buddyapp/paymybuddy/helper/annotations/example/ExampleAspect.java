@@ -1,10 +1,7 @@
 package com.buddyapp.paymybuddy.helper.annotations.example;
 
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
-import com.buddyapp.paymybuddy.mappers.TransactionMapper;
-import com.buddyapp.paymybuddy.mappers.TransactionMapperImpl;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
-import com.buddyapp.paymybuddy.mappers.UserMapperImpl;
 import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.transaction.repository.TransactionRepository;
@@ -31,9 +28,7 @@ public class ExampleAspect {
     @Autowired
     private UserService userService;
 
-    private TransactionMapper transactionMapper = new TransactionMapperImpl();
-
-    private UserMapper userMapper = new UserMapperImpl();
+    UserMapper userMapper;
 
     @Autowired
     private TransactionRepository transactionRepository;

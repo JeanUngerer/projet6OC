@@ -26,7 +26,6 @@ public interface TransactionMapper {
     Transaction entityToModel(TransactionEntity entity);
     List<Transaction> entitiesToModel(List<TransactionEntity> entities);
 
-    List<MyTransaction> transactionsToMyTransactions(List<Transaction> transactions);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromDto(TransactionDTO dto, @MappingTarget Transaction model, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
 }

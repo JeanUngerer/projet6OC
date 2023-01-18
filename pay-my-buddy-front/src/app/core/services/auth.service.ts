@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   register ({username, email, password, firstname, lastname}: {username : string, email : string, password : string, firstname : string, lastname : string}){
-    return this.apiService.put(`/register`,
+    return this.apiService.putNoAuth(`/register`,
 {
         username : username,
         mail : email,

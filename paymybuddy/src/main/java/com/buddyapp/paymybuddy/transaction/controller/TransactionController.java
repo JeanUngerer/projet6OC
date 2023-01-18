@@ -5,6 +5,7 @@ import com.buddyapp.paymybuddy.DTOs.MyTransactionsDTO;
 import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
 import com.buddyapp.paymybuddy.DTOs.TransactionToSendDTO;
 import com.buddyapp.paymybuddy.auth.service.TokenService;
+import com.buddyapp.paymybuddy.mappers.CustomMappers;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
 import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
@@ -31,6 +32,8 @@ import java.util.List;
 public class TransactionController {
 
     private TransactionMapper transactionMapper;
+
+    private CustomMappers customMapper;
 
     @Autowired
     private TransactionService transactionService;
@@ -70,10 +73,10 @@ public class TransactionController {
     }
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
-    @PutMapping("/mytransactions")
+    @GetMapping("/mytransactions")
     public ResponseEntity<MyTransactionsDTO> getMyTransactions(@RequestHeader("Authorization") String requestTokenHeader){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
-        MyTransactionsDTO myTransactions = new MyTransactionsDTO(transactionMapper.transactionsToMyTransactions(me.getTransactions()));
+        MyTransactionsDTO myTransactions = new MyTransactionsDTO(customMapper.transactionsToMyTransactions(me.getTransactions()));
         return ResponseEntity.ok( myTransactions );
     }
 }

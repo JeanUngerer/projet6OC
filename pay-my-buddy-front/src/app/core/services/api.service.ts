@@ -14,11 +14,7 @@ export class ApiService {
   }
   constructor(private http: HttpClient,
               private jwtSerice: JWTService) {}
-  headers = {
-    'content-type': 'application/json',
-  };
 
-  httpOptions = { headers: this.headers };
   private formatErrors(error: any) {
     return throwError(error.error);
   }
@@ -35,13 +31,43 @@ export class ApiService {
       .pipe(catchError(this.formatErrors));
   }
 
+  getNoAuth(path: string): Observable<any> {
+    return this.http
+      .get(`${environment.apiUrl}${path}`,
+        {
+          headers: new HttpHeaders(
+            {
+            })
+        })
+      .pipe(catchError(this.formatErrors));
+  }
+
   put(path: string, body: Object = {}): Observable<any> {
     return this.http
       .put(
         `${environment.apiUrl}${path}`,
         JSON.stringify(body),
-        this.httpOptions
-      )
+        {
+          headers: new HttpHeaders(
+            {
+              'Authorization': "Bearer " + this.jwtSerice.getToken(),
+              'content-type': 'application/json',
+            })
+        })
+      .pipe(catchError(this.formatErrors));
+  }
+
+  putNoAuth(path: string, body: Object = {}): Observable<any> {
+    return this.http
+      .put(
+        `${environment.apiUrl}${path}`,
+        JSON.stringify(body),
+        {
+          headers: new HttpHeaders(
+            {
+              'content-type': 'application/json',
+            })
+        })
       .pipe(catchError(this.formatErrors));
   }
 
@@ -50,8 +76,13 @@ export class ApiService {
       .post(
         `${environment.apiUrl}${path}`,
         JSON.stringify(body),
-        this.httpOptions
-      )
+        {
+          headers: new HttpHeaders(
+            {
+              'Authorization': "Bearer " + this.jwtSerice.getToken(),
+              'content-type': 'application/json',
+            })
+        })
       .pipe(catchError(this.formatErrors));
   }
 

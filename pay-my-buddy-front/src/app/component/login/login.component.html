@@ -11,7 +11,7 @@
       />
     </div>-->
 
-    <button class="button button-validate button-home">
+    <button (click)="goToHome()" class="button button-validate button-home">
       Pay my Buddy
     </button>
 
@@ -25,7 +25,7 @@
         <div class="form-group">
           <input
             type="text"
-            placeholder="Enter email"
+            placeholder="Enter username"
             id="email"
             [ngClass]="{
               'input-error': hasError('email')

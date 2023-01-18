@@ -25,6 +25,5 @@ public class MyUser {
     String roles;
     Double balance;
     List<Contact> contacts;
-    //List<User> contactsOf;
     List<Transaction> transactions;
 }

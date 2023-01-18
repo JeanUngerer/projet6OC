@@ -13,6 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ContactDTO {
     Long contactId;
-    MyUser myUser;
+    MyUser user;
     MyUser friend;
 }

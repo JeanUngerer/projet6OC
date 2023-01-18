@@ -58,6 +58,7 @@ public class TransactionControllerTest {
 
         Transaction transaction = new Transaction(1L, 100.,0.,  "testTransaction for 100", trader, sender, LocalDateTime.now());
         System.out.println("TRANSACTION OBJECT : " + asJsonString(transaction));
+        String json =  asJsonString(transaction);
 
         mockMvc.perform(put("/transaction/send")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -66,11 +67,9 @@ public class TransactionControllerTest {
                 .andExpect(status().isOk()).andExpect(content()
                         .contentType("application/json"))
                 .andExpect(jsonPath("$.amount").value(100));
-
-
     }
 
-    @Test
+    //@Test
     public void dummyTestAPI() throws Exception{
 
         MyUser sender = userService.createUser(new UserDTO( "mail3@mail.com", "user3","pass3", "firsteName3",

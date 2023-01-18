@@ -98,4 +98,8 @@ export class LoginComponent implements OnInit {
     console.log("RES : ", res);
   }
 
+  goToHome(){
+    this.router.navigate(['home']);
+  }
+
 }

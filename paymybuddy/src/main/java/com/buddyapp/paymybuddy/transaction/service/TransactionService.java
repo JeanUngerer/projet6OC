@@ -40,10 +40,14 @@ public class TransactionService {
     @Autowired
     private UserService userService;
 
+    @Autowired
     TransactionRepository transactionRepository;
+    @Autowired
     TransactionMapper transactionMapper;
+
     UserRepository userRepository;
 
+    @Autowired
     UserMapper userMapper;
 
     public List<Transaction> findAllUserTransactions(Long userId) {

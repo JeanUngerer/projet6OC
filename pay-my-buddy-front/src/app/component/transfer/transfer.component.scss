@@ -1,0 +1,22 @@
+@import "../../../styles.scss";
+
+.transferModal {
+  box-sizing: border-box;
+  background-color: whitesmoke;
+  border-radius: 1em;
+  border: 3px solid black;
+  box-shadow: grey;
+  width: 100%;
+  min-width: 30em;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
+
+.content{
+  padding: 1em;
+  width: 60em;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
