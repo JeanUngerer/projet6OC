@@ -43,6 +43,10 @@ public class TransactionController {
     @Autowired
     TokenService tokenService;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Full CRUD for admin
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/allfrom/{id}")
     public ResponseEntity<List<TransactionDTO>> findAllUserTransactions(@PathVariable("id") Long id) {
@@ -62,6 +66,10 @@ public class TransactionController {
         return ResponseEntity.ok(transactionMapper.modelToDto(response));
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // User accessible
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
     @PutMapping("/sendmoney")
     public ResponseEntity<MessageDTO> sendMoney(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody TransactionToSendDTO transactionDTO){
@@ -76,7 +84,6 @@ public class TransactionController {
     @GetMapping("/mytransactions")
     public ResponseEntity<MyTransactionsDTO> getMyTransactions(@RequestHeader("Authorization") String requestTokenHeader){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
-        MyTransactionsDTO myTransactions = new MyTransactionsDTO(customMapper.transactionsToMyTransactions(me.getTransactions()));
-        return ResponseEntity.ok( myTransactions );
+        return ResponseEntity.ok( transactionService.myTransactions(me) );
     }
 }

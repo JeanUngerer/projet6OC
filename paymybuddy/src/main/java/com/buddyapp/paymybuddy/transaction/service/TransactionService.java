@@ -1,10 +1,13 @@
 package com.buddyapp.paymybuddy.transaction.service;
 
 
+import com.buddyapp.paymybuddy.DTOs.MyContactsDTO;
+import com.buddyapp.paymybuddy.DTOs.MyTransactionsDTO;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.helper.annotations.example.TransactionFee;
+import com.buddyapp.paymybuddy.mappers.CustomMappers;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.models.MyUser;
@@ -50,11 +53,13 @@ public class TransactionService {
     @Autowired
     UserMapper userMapper;
 
+    CustomMappers customMapper;
+
     public List<Transaction> findAllUserTransactions(Long userId) {
         try {
             UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
-            return transactionMapper.entitiesToModel(transactionRepository.findAllByUser(userEntity));
+            return transactionMapper.entitiesToModel(transactionRepository.findAllByUser(userEntity).orElseThrow());
         } catch (Exception e) {
             log.error("Couldn't find all transaction: " + e.getMessage());
             throw new ExceptionHandler("We could not find your transactions");
@@ -79,7 +84,7 @@ public class TransactionService {
             MyUser trader = userService.getUserById(transaction.getTrader().getUserId());
             MyUser myUser = userService.getUserById(transaction.getMyUser().getUserId());
 
-            if (myUser.getBalance() < transaction.getAmount()) {
+            if (myUser.getBalance() < (transaction.getAmount())) {
                 throw new ExceptionHandler("Not enough money");
             }
 
@@ -88,7 +93,6 @@ public class TransactionService {
             myUser.setBalance(myUser.getBalance() - transaction.getAmount());
 
             transaction.setMyUser(myUser);
-
 
             transaction.setTrader(trader);
 
@@ -119,4 +123,9 @@ public class TransactionService {
         return  transaction;
     }
 
+    public MyTransactionsDTO myTransactions(MyUser me) {
+        MyTransactionsDTO myTransactionsDTO = new MyTransactionsDTO();
+        myTransactionsDTO.setMyTransactionList (customMapper.transactionsToMyTransactions(transactionMapper.entitiesToModel(transactionRepository.findAllByUser_UserId(me.getUserId()).get())));
+        return myTransactionsDTO;
+    }
 }

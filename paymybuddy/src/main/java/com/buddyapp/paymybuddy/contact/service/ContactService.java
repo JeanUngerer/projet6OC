@@ -11,6 +11,7 @@ import com.buddyapp.paymybuddy.mappers.CustomMappers;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.MyUser;
+import com.buddyapp.paymybuddy.user.repository.UserRepository;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,8 @@ import java.util.List;
 public class ContactService {
 
     ContactRepository contactRepository;
+
+    UserRepository userRepository;
     ContactMapper contactMapper;
 
     CustomMappers customMapper;
@@ -100,7 +103,8 @@ public class ContactService {
 
     public MyContactsDTO getMyContacts(MyUser me) {
         MyContactsDTO myContactsDTO = new MyContactsDTO();
-        myContactsDTO.setMyContacts(customMapper.contactsToMyContacts(me.getContacts()));
+        myContactsDTO.setMyContacts(customMapper.contactsToMyContacts(contactMapper.entitiesToModels(contactRepository.findAllByUser_UserId(me.getUserId()).get())));
+
         return myContactsDTO;
     }
 

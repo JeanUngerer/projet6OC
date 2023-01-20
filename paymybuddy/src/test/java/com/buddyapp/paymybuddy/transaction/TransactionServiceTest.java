@@ -28,7 +28,7 @@ public class TransactionServiceTest {
     @Autowired
     private TransactionService transactionService;
 
-    //@Test
+    @Test
     public void sendTransactionServiceTest(){
         Double FeesRate = 0.05;
 

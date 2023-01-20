@@ -28,6 +28,7 @@ public class ExampleAspect {
     @Autowired
     private UserService userService;
 
+    @Autowired
     UserMapper userMapper;
 
     @Autowired
@@ -70,6 +71,11 @@ public class ExampleAspect {
             Double gasFee = amount * FEE_RATE;
             Double totalBurn = gasFee + amount;
             MyUser myUserInfo = userService.getUserById(transactionToPlay.getMyUser().getUserId());
+
+            if (myUserInfo.getBalance() < totalBurn){
+                throw new ExceptionHandler( "Not enough money to pay transaction fees");
+            }
+
             transactionToPlay.setFee(gasFee);
             int arglength = arguments.length;
             for (int i = 0; i< arglength; i++){
@@ -80,6 +86,9 @@ public class ExampleAspect {
             }
 
             proceed[0] = proceedingJoinPoint.proceed();
+
+
+
             myUserInfo = userService.getUserById(transactionToPlay.getMyUser().getUserId());
             myUserInfo.setBalance(myUserInfo.getBalance()-gasFee);
             userRepository.save(userMapper.modelToEntity(myUserInfo));

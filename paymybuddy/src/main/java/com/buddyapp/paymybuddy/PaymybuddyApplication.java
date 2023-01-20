@@ -1,11 +1,16 @@
 package com.buddyapp.paymybuddy;
 
+import com.buddyapp.paymybuddy.DTOs.UserDTO;
 import com.buddyapp.paymybuddy.auth.config.RsaKeyProperties;
 import com.buddyapp.paymybuddy.constants.Provider;
+import com.buddyapp.paymybuddy.contact.repository.ContactRepository;
 import com.buddyapp.paymybuddy.entities.ContactEntity;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.entities.UserEntity;
+import com.buddyapp.paymybuddy.models.Contact;
+import com.buddyapp.paymybuddy.models.Transaction;
 import com.buddyapp.paymybuddy.user.repository.UserRepository;
+import com.buddyapp.paymybuddy.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,15 +33,26 @@ public class PaymybuddyApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(UserRepository users, PasswordEncoder encoder) {
+	CommandLineRunner commandLineRunner(UserService users, PasswordEncoder encoder) {
 		return args -> {
+			/*
 			users.save(new UserEntity(null, Provider.LOCAL, "mailadmin.com", "usernameAdmin", encoder.encode("password"),"firstName" ,
 					"lastName", "0606060606", "ROLE_ADMIN", 1000.,
-					new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
+					null, null);
+			new UserEntity(contacts, null, Provider.LOCAL, "mailadmin.com", "usernameAdmin", encoder.encode("password"),"firstName" ,
+					"lastName", "0606060606", "ROLE_ADMIN", 1000.,
+					new ArrayList<ContactEntity>())
 
 			users.save(new UserEntity(null, Provider.LOCAL,  "mailuser.com", "usernameUser", encoder.encode("password"),"firstNameU" ,
 					"lastNameU", "0606060606", "ROLE_USER", 1000.,
-					new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
+					new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));*/
+
+
+			users.createUser(new UserDTO("mailadmin.com", "usernameAdmin", "password","firstName" ,
+					"lastName", "0606060606", "ROLE_ADMIN", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+
+			users.createUser(new UserDTO("mailuser.com", "usernameUser", "password","firstNameU" ,
+					"lastNameU", "0606060606", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
 		};
 	}

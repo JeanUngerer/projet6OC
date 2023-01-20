@@ -43,13 +43,13 @@ public class AuthControllerTest {
 
     }
 
-    //@Test
+    @Test
     void rootWhenUnauthenticatedThen401() throws Exception {
         this.mockMvc.perform(get("/user"))
                 .andExpect(status().isUnauthorized());
     }
 
-    //@Test
+    @Test
     void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
 
         MyUser sender = userService.createUser(new UserDTO( "mailHello@mail.com", "hello1", "pass1", "firsteName1",
@@ -60,14 +60,17 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String token = result.getResponse().getHeader("Authentication");
+        String token = result.getResponse().getHeader("Token");
 
         this.mockMvc.perform(get("/user")
                         .header("Authorization", "Bearer " + token))
-                .andExpect(content().string("Welcome hello1"));
+                    .andDo(print())
+                    .andExpect(status().isOk()).andExpect(content()
+                            .contentType("application/json"))
+                    .andExpect(jsonPath("$.message").value("Hi hello1"));
     }
 
-    //@Test
+    @Test
     @WithMockUser
     public void rootWithMockUserStatusIsOK() throws Exception {
         this.mockMvc.perform(get("/home")).andExpect(status().isOk());

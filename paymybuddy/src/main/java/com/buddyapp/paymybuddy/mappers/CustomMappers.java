@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 public class CustomMappers {
 
+
     public MyContact contactToMyContact(Contact contact) {
         if ( contact == null ) {
             return null;
@@ -64,6 +65,9 @@ public class CustomMappers {
 
         if ( transaction.getAmount() != null ) {
             myTransaction.setAmount( transaction.getAmount() );
+        }
+        if ( transaction.getFee() != null ) {
+            myTransaction.setFee( transaction.getFee() );
         }
         myTransaction.setDate( transaction.getDate() );
         myTransaction.setDescription( transaction.getDescription() );

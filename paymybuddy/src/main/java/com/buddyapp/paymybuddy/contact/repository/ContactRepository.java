@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface ContactRepository extends JpaRepository<ContactEntity, Long> {
     Optional<ContactEntity> findByUserAndFriend(UserEntity user, UserEntity friend);
 
-    Optional<List<ContactEntity>> findAllByUser(UserEntity user);
+    Optional<List<ContactEntity>> findAllByUser_UserId(Long userId);
 }

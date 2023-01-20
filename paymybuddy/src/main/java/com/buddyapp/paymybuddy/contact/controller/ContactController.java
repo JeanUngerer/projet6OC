@@ -38,6 +38,10 @@ public class ContactController {
 
     private ContactMapper contactMapper;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Full CRUD for admin
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @GetMapping("/contacts")
     public ResponseEntity<List<ContactDTO>> getContacts() {
@@ -52,21 +56,25 @@ public class ContactController {
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PutMapping("/create")
-    public ResponseEntity<ContactDTO> createUser(@RequestBody ContactDTO contactDto) {
+    public ResponseEntity<ContactDTO> create(@RequestBody ContactDTO contactDto) {
         return ResponseEntity.ok(contactMapper.modelToDto(contactService.createContact(contactDto)));
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @PostMapping("")
-    public ResponseEntity<ContactDTO> updateUser(@RequestBody ContactDTO contactDto) {
+    public ResponseEntity<ContactDTO> update(@RequestBody ContactDTO contactDto) {
         return ResponseEntity.ok(contactMapper.modelToDto(contactService.updateContact(contactDto)));
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         return ResponseEntity.ok(contactService.deleteContact(id));
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // User accessible
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
     @GetMapping("/mycontacts")
@@ -92,7 +100,7 @@ public class ContactController {
     }
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
-    @PutMapping("/removecontactbyusername")
+    @DeleteMapping("/removecontactbyusername")
     public ResponseEntity<MyContactsDTO> removeContact(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddContactByNameDTO dto){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
         contactService.removeContactByUsername(dto.getUsername(), me);

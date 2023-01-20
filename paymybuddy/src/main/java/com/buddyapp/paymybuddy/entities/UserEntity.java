@@ -1,12 +1,14 @@
 package com.buddyapp.paymybuddy.entities;
 
 import com.buddyapp.paymybuddy.constants.Provider;
+import com.buddyapp.paymybuddy.contact.repository.ContactRepository;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -56,5 +58,4 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "transactionId")
     List<TransactionEntity> transactions;
-
 }

@@ -137,6 +137,8 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser getUserByUserName(String userName) {
         try {
+            MyUser mee =userMapper.entityToModel(userRepository.findByUserName(userName).orElseThrow(()
+                    -> new ExceptionHandler("We could not find your account")));
             return userMapper.entityToModel(userRepository.findByUserName(userName).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account")));
         } catch (Exception e) {
