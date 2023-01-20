@@ -1,10 +1,15 @@
 package com.buddyapp.paymybuddy.mappers;
 
 
+import com.buddyapp.paymybuddy.contact.repository.ContactRepository;
+import com.buddyapp.paymybuddy.entities.ContactEntity;
+import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.MyContact;
 import com.buddyapp.paymybuddy.models.MyTransaction;
 import com.buddyapp.paymybuddy.models.Transaction;
+import com.buddyapp.paymybuddy.transaction.repository.TransactionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +18,12 @@ import java.util.List;
 @Component
 public class CustomMappers {
 
+    @Autowired
+    ContactRepository contactRepository;
+
+    @Autowired
+    TransactionRepository transactionRepository;
+
 
     public MyContact contactToMyContact(Contact contact) {
         if ( contact == null ) {
@@ -20,10 +31,11 @@ public class CustomMappers {
         }
 
         MyContact myContact = new MyContact();
-        myContact.setFirstname(contact.getFriend().getFirstName());
-        myContact.setLastname(contact.getFriend().getLastName());
-        myContact.setUsername(contact.getFriend().getUserName());
-        myContact.setMail(contact.getFriend().getEmail());
+        ContactEntity contactEntityFromRep = contactRepository.findById(contact.getContactId()).get();
+        myContact.setFirstname(contactEntityFromRep.getFriend().getFirstName());
+        myContact.setLastname(contactEntityFromRep.getFriend().getLastName());
+        myContact.setUsername(contactEntityFromRep.getFriend().getUserName());
+        myContact.setMail(contactEntityFromRep.getFriend().getEmail());
 
 
         return myContact;
@@ -69,10 +81,12 @@ public class CustomMappers {
         if ( transaction.getFee() != null ) {
             myTransaction.setFee( transaction.getFee() );
         }
+        TransactionEntity transactionEntity = transactionRepository.findById(transaction.getTransactionId()).get();
+
         myTransaction.setDate( transaction.getDate() );
         myTransaction.setDescription( transaction.getDescription() );
         myTransaction.setAmount(transaction.getAmount());
-        myTransaction.setReceiverUsername(transaction.getTrader().getUserName());
+        myTransaction.setReceiverUsername(transactionEntity.getTrader().getUserName());
 
         return myTransaction;
     }

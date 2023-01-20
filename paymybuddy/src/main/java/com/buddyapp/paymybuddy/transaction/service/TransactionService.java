@@ -105,8 +105,9 @@ public class TransactionService {
                 public Void doInTransaction(TransactionStatus transactionStatus) {
                     try {
                         transactionRepository.save(transactionMapper.modelToEntity(transaction));
-                        userRepository.save(userMapper.modelToEntity(trader));
+
                         userRepository.save(userMapper.modelToEntity(myUser));
+                        userRepository.save(userMapper.modelToEntity(trader));
 
                     } catch (Throwable t) {
                         transactionStatus.setRollbackOnly();

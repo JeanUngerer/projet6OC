@@ -133,6 +133,10 @@ public class TransactionControllerTest {
 
         transactionService.sendTransaction(transaction);
 
+        transaction.setTransactionId(2L);
+
+        transactionService.sendTransaction(transaction);
+
         String token = obtainAccessToken(sender.getUserName(), "pass1");
 
         mockMvc.perform(get("/transaction/mytransactions")

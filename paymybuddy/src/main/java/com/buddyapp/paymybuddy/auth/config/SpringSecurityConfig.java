@@ -98,7 +98,7 @@ public class SpringSecurityConfig {
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
-                .oauth2Login(oauth -> oauth
+                /*.oauth2Login(oauth -> oauth
                         //.tokenEndpoint(authentication -> handler.generateToken())
                         //.accessTokenResponseClient()
                         //.userInfoEndpoint()
@@ -113,7 +113,7 @@ public class SpringSecurityConfig {
                         .failureHandler((request, response, exception) -> {
                             request.getSession().setAttribute("error.message", exception.getMessage());
                             //handler.onAuthenticationFailure(request, response, exception);
-                        }))
+                        }))*/
                // .oauth2Login(withDefaults())
                 .httpBasic(withDefaults())
                 .build();

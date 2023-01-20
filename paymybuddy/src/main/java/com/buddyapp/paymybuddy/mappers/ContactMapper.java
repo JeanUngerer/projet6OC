@@ -18,9 +18,19 @@ public interface ContactMapper {
     List<Contact> dtosToModels(List<ContactDTO> dtos);
 
     ContactEntity modelToEntity(Contact contact);
+
     List<ContactEntity> modelsToEntities(List<Contact> contacts);
     Contact entityToModel(ContactEntity entity);
+
+    @IterableMapping(qualifiedByName="mapWithoutData")
     List<Contact> entitiesToModels(List<ContactEntity> entities);
+
+
+    @Named("mapWithoutData")
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "friend", ignore = true)
+    Contact mapWithouData(ContactEntity source);
+
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateContactFromDto(ContactDTO dto, @MappingTarget Contact model, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);

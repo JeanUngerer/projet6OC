@@ -17,9 +17,16 @@ public interface UserMapper {
     MyUser dtoToModel(UserDTO dto);
     List<MyUser> dtosToModels(List<UserDTO> dtos);
 
+    @Mapping(target = "contacts", ignore = true)
+    @Mapping(target = "transactions", ignore = true)
     UserEntity modelToEntity(MyUser myUser);
     List<UserEntity> modelsToEntities(List<MyUser> myUsers);
+
+    @Mapping(target = "contacts", ignore = true)
+    @Mapping(target = "transactions", ignore = true)
     MyUser entityToModel(UserEntity entity);
+
+
     List<MyUser> entitiesToModel(List<UserEntity> entities);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUserFromModel(MyUser model, @MappingTarget UserEntity entity, @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);

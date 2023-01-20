@@ -16,11 +16,15 @@ export class TransferComponent implements OnInit{
 
   submitted = false;
   transfers: Transfer[] = [];
-  displayedColumns: string[] = ['sentTo', 'amount', 'date', 'description'];
+  displayedColumns: string[] = ['sentTo', 'amount', 'fee', 'date', 'description'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Transfer>(this.transfers);
 
   contactList:MyContact[] = [];
+
+  usernameList:String[] = [];
+
+  sentResponse:String = "";
 
   contactControl = new FormControl(null, [Validators.required]);
   amountControl = new FormControl(0, [Validators.min(0), Validators.required]);
@@ -45,14 +49,18 @@ export class TransferComponent implements OnInit{
   refreshContactList(){
     this.contactService.myContacts()
       .subscribe({
-        next: res => {this.contactList = res, console.log("CONTACT LIST", res)},
+        next: res => {this.updateContactList(res.myContacts), console.log("CONTACT LIST", res)},
         error: err => {console.log("ERROR : ", err)}
       })
   }
 
   refreshTransfersList(){
     this.transferService.myTransfers().subscribe({
-      next:(r) => {console.log("RESULT : ", r); this.transfers = r},
+      next:(r) => {
+        console.log("RESULT : ", r.myTransactionList);
+        this.transfers = r.myTransactionList;
+        this.dataSource = new MatTableDataSource<Transfer>(this.transfers);
+        },
       error:(err) => console.log("ERROR : ", err)}
     );
   }
@@ -68,14 +76,18 @@ export class TransferComponent implements OnInit{
       sendTo: this.contactList.filter(contact => contact.username === friendToSendTo)[0],
       amount: this.transferAmount
     }).subscribe({
-      next:(r) => {console.log("RESULT : ", r); this.transfers = r},
+      next:(r) => {
+        console.log("RESULT : ", r);
+        this.refreshTransfersList();
+        this.submitted = false
+        this.sentResponse = r.message},
       error:(err) => console.log("ERROR : ", err)}
     );
   }
 
 
   get transferTo() {
-    const contact = this.selectedFriend;
+    const contact = this.tranferForm.controls.contact.value;
     if (contact){
       return contact;
     }
@@ -90,11 +102,19 @@ export class TransferComponent implements OnInit{
   }
 
   hasError(field: string) {
-    return !this.tranferForm.get(field)?.valid;
+    return !this.tranferForm.get(field)?.valid && this.submitted;
 
   }
 
   resetSubmitted() {
     this.submitted= false;
+    this.sentResponse = "";
+    console.log("Username value : ", this.tranferForm.controls.contact.value);
+  }
+
+  updateContactList(liste: MyContact[]){
+    this.contactList = liste;
+    this.usernameList = Array.from(liste, elem => elem.username);
+    console.log("UsernameListe : ", this.usernameList);
   }
 }

@@ -2,7 +2,7 @@
   <div class="transferModal">
     <div class="content">
 
-      <label class="mat-card-title">List of transfers</label>
+      <label class="mat-card-title label">List of transfers</label>
       <br><br>
 
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -15,6 +15,11 @@
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef> Amount </th>
           <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fee">
+          <th mat-header-cell *matHeaderCellDef> Transfer Fees </th>
+          <td mat-cell *matCellDef="let element"> {{element.fee}} </td>
         </ng-container>
 
         <ng-container matColumnDef="date">
@@ -43,15 +48,14 @@
       <br><br>
 
 
-      <form class="login-form" [formGroup]="tranferForm" (ngSubmit)="sendMoney()">
+      <form class="transfer-form" [formGroup]="tranferForm" (ngSubmit)="sendMoney()">
         <div class="form-group">
-          <label class="form-group-label">Send To</label>
-          <ng-select [items]="contactList"
+          <label class="form-group-label label">Send To</label>
+          <ng-select [items]="usernameList"
                      placeholder="Select contact to send money to"
-                     bindLabel="username"
-                     bindValue="username"
-                     [(ngModel)]="selectedFriend"
-                     (change)="resetSubmitted()">
+
+                     (change)="resetSubmitted()"
+          formControlName="contact">
           </ng-select>
           <app-error-message
             [visible]="submitted && hasError('email')"
@@ -60,7 +64,7 @@
           </app-error-message>
         </div>
         <br><br>
-        <label class="form-group-label">Amount</label>
+        <label class="form-group-label label">Amount</label>
         <div class="form-group">
           <input
             type="number"
@@ -80,9 +84,14 @@
           </app-error-message>
         </div>
 
+        <div class ="result" *ngIf="sentResponse !== ''">{{sentResponse}}</div>
+
         <button class="button login-button button-primary" type="submit">
           Send
         </button>
+
+
+
       </form>
     </div>
   </div>

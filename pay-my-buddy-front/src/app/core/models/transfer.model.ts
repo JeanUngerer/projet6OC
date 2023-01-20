@@ -7,6 +7,10 @@ export interface Transfer {
   description: String;
 }
 
+export interface MyTransfersDTO{
+  myTransactionList: Transfer[];
+}
+
 
 export interface TransferToSend{
   sendTo: MyContact;

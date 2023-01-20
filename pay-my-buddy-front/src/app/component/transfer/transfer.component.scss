@@ -20,3 +20,30 @@
   display: flex;
   flex-direction: column;
 }
+
+.button-primary{
+  margin-top: 1rem;
+}
+
+.form-group{
+  margin-bottom: 2rem;
+  width: 50em;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.transfer-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: available;
+}
+
+.result{
+  background-color: limegreen;
+  color: #333333;
+  border-radius: 10px;
+  border: 2px solid #333333;
+
+}

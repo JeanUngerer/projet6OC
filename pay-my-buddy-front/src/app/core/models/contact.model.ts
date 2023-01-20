@@ -4,3 +4,7 @@ export interface MyContact {
   lastname: string;
   username: string;
 }
+
+export interface MyContactsDTO {
+  myContacts: MyContact[];
+}

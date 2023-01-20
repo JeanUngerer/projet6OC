@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {ApiService} from "./api.service";
 import {Observable} from "rxjs";
-import {Transfer, TransferToSend} from "../models/transfer.model";
+import {MyTransfersDTO, Transfer, TransferToSend} from "../models/transfer.model";
 import {environment} from "../../../environments/environment";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class TransferService {
 
   constructor(private  apiService: ApiService) { }
 
-  myTransfers(): Observable<Transfer[]> {
+  myTransfers(): Observable<MyTransfersDTO> {
     return this.apiService.get(`/${environment.apiTransfer}/mytransactions`);
   }
 
