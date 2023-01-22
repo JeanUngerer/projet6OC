@@ -1,12 +1,8 @@
 package com.buddyapp.paymybuddy.mappers;
 
 import com.buddyapp.paymybuddy.DTOs.TransactionDTO;
-import com.buddyapp.paymybuddy.entities.ContactEntity;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.helper.CycleAvoidingMappingContext;
-import com.buddyapp.paymybuddy.models.Contact;
-import com.buddyapp.paymybuddy.models.MyContact;
-import com.buddyapp.paymybuddy.models.MyTransaction;
 import com.buddyapp.paymybuddy.models.Transaction;
 import org.mapstruct.*;
 
