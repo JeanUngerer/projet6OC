@@ -1,5 +1,6 @@
 package com.buddyapp.paymybuddy.user.controller;
 
+import com.buddyapp.paymybuddy.DTOs.AddFundsDTO;
 import com.buddyapp.paymybuddy.DTOs.MyBalanceDTO;
 import com.buddyapp.paymybuddy.DTOs.MyTransactionsDTO;
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
@@ -80,9 +81,17 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
     @GetMapping("/mybalance")
-    public ResponseEntity<MyBalanceDTO> getMyTransactions(@RequestHeader("Authorization") String requestTokenHeader){
+    public ResponseEntity<MyBalanceDTO> getMyBalance(@RequestHeader("Authorization") String requestTokenHeader){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
         return ResponseEntity.ok( new MyBalanceDTO(me.getBalance()) );
+    }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/addfunds")
+    public ResponseEntity<MyBalanceDTO> addFunds(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddFundsDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+
+        return ResponseEntity.ok( new MyBalanceDTO(userService.insertFundIntoApp(dto.getAmount(), me.getUserId())) );
     }
 
 

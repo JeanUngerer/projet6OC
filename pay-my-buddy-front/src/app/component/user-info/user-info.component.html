@@ -1,1 +1,36 @@
-<p>user-info works!</p>
+
+<div class="transferModal">
+  <div class="content">
+
+    <form class="transfer-form" [formGroup]="addMoneyForm" (ngSubmit)="sendFunds()">
+
+      <label class="form-group-label label">Add funds to your wallet</label>
+      <div class="form-group">
+        <input
+          type="number"
+          id="amount"
+          placeholder="Enter amount"
+          class="input"
+          [ngClass]="{
+                  'input-error': hasError('amount')
+                }"
+          formControlName="amount"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && hasError('amount')"
+          message="Please provide a valid amount"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-primary" type="submit">
+        Add Funds
+      </button>
+
+
+
+    </form>
+
+  </div>
+</div>

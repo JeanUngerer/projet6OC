@@ -114,7 +114,7 @@ public class SpringSecurityConfig {
                             request.getSession().setAttribute("error.message", exception.getMessage());
                             //handler.onAuthenticationFailure(request, response, exception);
                         }))*/
-               // .oauth2Login(withDefaults())
+                .oauth2Login(withDefaults())
                 .httpBasic(withDefaults())
                 .build();
     }

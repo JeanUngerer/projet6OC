@@ -16,3 +16,11 @@ export interface TransferToSend{
   sendTo: MyContact;
   amount: Number;
 }
+
+export interface MyBalanceDTO{
+  balance: number;
+}
+
+export interface AddFundsDTO {
+  amount: number;
+}

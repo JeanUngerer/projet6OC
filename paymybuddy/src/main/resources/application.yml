@@ -21,7 +21,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/pay_my_buddy
     username: root
-    password: admin1
+    password: admin
 
 rsa:
   private-key: classpath:certs/private.pem

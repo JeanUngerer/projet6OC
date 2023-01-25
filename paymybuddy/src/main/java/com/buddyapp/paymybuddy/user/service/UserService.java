@@ -159,15 +159,15 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         }
     }
 
-    public void insertFundIntoApp(Double amount, Long userId) {
+    public double insertFundIntoApp(double amount, Long userId) {
         try {
             UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
-            MyUser myUser = userMapper.entityToModel(userEntity);
-            myUser.setBalance(myUser.getBalance() + amount);
-            userRepository.save(userMapper.modelToEntity(myUser));
+            userEntity.setBalance(userEntity.getBalance() + amount);
+            userRepository.save(userEntity);
+            return userEntity.getBalance();
         } catch (Exception e) {
-            log.error("Couldn't find insertFundIntoApp: " + e.getMessage());
+            log.error("Couldn't find user: " + e.getMessage());
             throw new ExceptionHandler("We could not put your fund in your account");
         }
     }
@@ -185,8 +185,8 @@ public class UserService implements UserDetailsService, OAuth2UserService {
             userRepository.save(userMapper.modelToEntity(myUser));
             return myUser;
         } catch (Exception e) {
-            log.error("Couldn't create user: " + e.getMessage());
-            throw new ExceptionHandler("We could not create your user");
+            log.error("Couldn't update user: " + e.getMessage());
+            throw new ExceptionHandler("We could not update your user");
         }
     }
 
@@ -199,5 +199,4 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         }
         return "Username issue while registering";
     }
-
 }

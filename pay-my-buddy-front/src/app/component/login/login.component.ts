@@ -94,7 +94,10 @@ export class LoginComponent implements OnInit {
   }
 
   logGithub(){
-    const res = this.loginService.connectGithub().subscribe();
+    const res = this.loginService.connectGithub().subscribe({
+      next: (res) => console.log("GITHUB RES : ", res),
+      error: (err) => console.log("GITHUB ERROR : ", err)
+    });
     console.log("RES : ", res);
   }
 

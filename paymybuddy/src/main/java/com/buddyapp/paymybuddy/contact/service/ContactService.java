@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,7 +46,10 @@ public class ContactService {
 
     public List<Contact> findAllContact() {
         try {
-            return contactMapper.entitiesToModels(contactRepository.findAll());
+            List<Contact> contactList = new ArrayList<Contact>();
+            contactRepository.findAll().forEach(ct -> contactList.add(contactMapper.entityToModel(ct)));
+//            return contactMapper.entitiesToModels(contactRepository.findAll());
+            return  contactList;
         } catch (Exception e) {
             log.error("We could not find all contact: " + e.getMessage());
             throw new ExceptionHandler("We could not find your contacts");
@@ -81,8 +85,8 @@ public class ContactService {
             contactRepository.save(contactMapper.modelToEntity(contact));
             return contact;
         } catch (Exception e) {
-            log.error("Couldn't create user: " + e.getMessage());
-            throw new ExceptionHandler("We could not create your contact");
+            log.error("Couldn't update user: " + e.getMessage());
+            throw new ExceptionHandler("We could not update your contact");
         }
     }
 
@@ -105,8 +109,6 @@ public class ContactService {
 
     public MyContactsDTO getMyContacts(MyUser me) {
         MyContactsDTO myContactsDTO = new MyContactsDTO();
-
-        List<ContactEntity> list = contactRepository.findAllByUser_UserId(me.getUserId()).get();
         myContactsDTO.setMyContacts(customMapper.contactsToMyContacts(contactMapper.entitiesToModels(contactRepository.findAllByUser_UserId(me.getUserId()).get())));
 
         return myContactsDTO;

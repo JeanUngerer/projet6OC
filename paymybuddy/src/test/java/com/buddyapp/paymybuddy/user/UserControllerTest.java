@@ -1,5 +1,6 @@
 package com.buddyapp.paymybuddy.user;
 
+import com.buddyapp.paymybuddy.DTOs.AddFundsDTO;
 import com.buddyapp.paymybuddy.constants.Provider;
 import com.buddyapp.paymybuddy.entities.ContactEntity;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,9 +23,9 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 
+import static com.buddyapp.paymybuddy.utils.ObjectAsJsonStrings.asJsonString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,6 +61,25 @@ public class UserControllerTest {
                 .andExpect(status().isOk()).andExpect(content()
                         .contentType("application/json"))
                 .andExpect(jsonPath("$.balance").value(1000.));
+    }
+
+    @Test
+    public void myAddFundsAPI() throws Exception {
+        UserEntity sender = userRepository.save(new UserEntity(1l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+                "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
+
+        String token = obtainAccessToken(sender.getUserName(), "pass1");
+
+        AddFundsDTO addFundsDTO = new AddFundsDTO(100.);
+
+        mockMvc.perform(put("/user/addfunds")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(addFundsDTO)))
+                .andDo(print())
+                .andExpect(status().isOk()).andExpect(content()
+                        .contentType("application/json"))
+                .andExpect(jsonPath("$.balance").value(1100.));
     }
 
 

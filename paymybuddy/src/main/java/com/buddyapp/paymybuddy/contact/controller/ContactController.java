@@ -61,7 +61,7 @@ public class ContactController {
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")
-    @PostMapping("")
+    @PostMapping("update")
     public ResponseEntity<ContactDTO> update(@RequestBody ContactDTO contactDto) {
         return ResponseEntity.ok(contactMapper.modelToDto(contactService.updateContact(contactDto)));
     }

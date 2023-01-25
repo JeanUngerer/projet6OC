@@ -6,6 +6,7 @@ import {TransferService} from "../../core/services/transfer.service";
 import {MyContact} from "../../core/models/contact.model";
 import {ContactService} from "../../core/services/contact.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UserService} from "../../core/services/user.service";
 
 @Component({
   selector: 'app-transfer',
@@ -32,17 +33,18 @@ export class TransferComponent implements OnInit{
     contact: this.contactControl,
     amount: this.amountControl,
   });
-  selectedFriend:any;
 
   constructor(
 
     private transferService: TransferService,
     private contactService: ContactService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
       this.refreshTransfersList();
       this.refreshContactList();
+      this.userService.handleBalanceUpdate();
   }
 
 
@@ -79,8 +81,9 @@ export class TransferComponent implements OnInit{
       next:(r) => {
         console.log("RESULT : ", r);
         this.refreshTransfersList();
-        this.submitted = false
-        this.sentResponse = r.message},
+        this.submitted = false;
+        this.sentResponse = r.message;
+        this.userService.handleBalanceUpdate();},
       error:(err) => console.log("ERROR : ", err)}
     );
   }

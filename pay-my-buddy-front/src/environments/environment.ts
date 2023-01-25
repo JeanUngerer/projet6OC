@@ -7,6 +7,7 @@ export const environment = {
   apiUrl: 'http://localhost:8090',
   apiContact: 'contact',
   apiTransfer:'transaction',
+  apiUser: 'user',
 };
 
 /*
