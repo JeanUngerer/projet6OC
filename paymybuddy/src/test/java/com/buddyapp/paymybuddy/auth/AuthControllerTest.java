@@ -1,9 +1,14 @@
 package com.buddyapp.paymybuddy.auth;
 
 import com.buddyapp.paymybuddy.DTOs.UserDTO;
+import com.buddyapp.paymybuddy.constants.Provider;
+import com.buddyapp.paymybuddy.entities.ContactEntity;
+import com.buddyapp.paymybuddy.entities.TransactionEntity;
+import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.models.Transaction;
+import com.buddyapp.paymybuddy.user.repository.UserRepository;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,7 +41,10 @@ public class AuthControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @BeforeAll
@@ -52,8 +61,9 @@ public class AuthControllerTest {
     @Test
     void rootWhenAuthenticatedThenSaysHelloUser() throws Exception {
 
-        MyUser sender = userService.createUser(new UserDTO( "mailHello@mail.com", "hello1", "pass1", "firsteName1",
-                "lastName1", "0101010101", "ROLE_ADMIN", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
+
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+                "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         MvcResult result = this.mockMvc.perform(post("/token")
                         .with(httpBasic(sender.getUserName(), "pass1")))
@@ -67,7 +77,7 @@ public class AuthControllerTest {
                     .andDo(print())
                     .andExpect(status().isOk()).andExpect(content()
                             .contentType("application/json"))
-                    .andExpect(jsonPath("$.message").value("Hi hello1"));
+                    .andExpect(jsonPath("$.message").value("Hi user1"));
     }
 
     @Test

@@ -25,7 +25,7 @@ export class ApiService {
 {
         headers: new HttpHeaders(
       {
-        'Authorization': "Bearer " + this.jwtSerice.getToken()
+        'Authorization': this.jwtSerice.getToken() ? "Bearer " + this.jwtSerice.getToken() : ""
         })
       })
       .pipe(catchError(this.formatErrors));

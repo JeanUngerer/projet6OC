@@ -64,6 +64,7 @@ public class LoginController {
     @RequestMapping("/*")
     public String getUserInfo(Principal user) {
         StringBuffer userInfo= new StringBuffer();
+
         if(user instanceof UsernamePasswordAuthenticationToken){
             userInfo.append(getUsernamePasswordLoginInfo(user));
         }
@@ -74,14 +75,17 @@ public class LoginController {
     }
 
 
-
+    @RequestMapping("/**")
+    public String other(Principal user){
+        return "OTHER";
+    }
 
 
 
 
     @GetMapping("/home")
     public ResponseEntity<MessageDTO> homeSweetHome(){
-        return ResponseEntity.ok(new MessageDTO("Hi AUthenticated !"));
+        return ResponseEntity.ok(new MessageDTO("Hi home !"));
     }
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
@@ -99,9 +103,12 @@ public class LoginController {
     }
 
     @RequestMapping("/authi")
-    public ResponseEntity<MessageDTO> getAuthi() {
+    public ResponseEntity<MessageDTO> getAuthi(@RequestHeader("Authorization") String requestTokenHeader) {
         log.info("Authi");
-        return ResponseEntity.ok(new MessageDTO("Not AUthenticated !"));
+        if(requestTokenHeader == null || requestTokenHeader.equals("")){return ResponseEntity.ok(new MessageDTO("Not AUthenticated !"));}
+
+        return ResponseEntity.ok(new MessageDTO("Hi " + tokenService.decodeTokenUsername(requestTokenHeader)));
+
     }
 
     @PreAuthorize("hasAuthority('SCOPE_ROLE_ADMIN')")

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -27,11 +28,12 @@ public class Oauth2LoginHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         String token = tokenService.generateToken(authentication);
-        String userName = authentication.getName();
+        Principal principal = (Principal) authentication;
 
+        String userName = "oauth2user";
         try{
             userService.getUserByUserName(userName);
-            SetResponse(response, token);
+            setResponse(response, token);
             return;
 
         } catch (Exception e){
@@ -40,14 +42,14 @@ public class Oauth2LoginHandler {
         userService.createOauth2User(new UserDTO("NoMail goten from " + userName, userName,"No auth via password for " + userName, null,
                 null, null, authentication.getAuthorities().toString(), 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GITHUB);
 
-        SetResponse(response, token);
+        setResponse(response, token);
     }
 
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, Exception exception) {
 
     }
 
-    private void SetResponse(HttpServletResponse response, String token) {
+    private void setResponse(HttpServletResponse response, String token) {
         response.setHeader("Token", token);
     }
 

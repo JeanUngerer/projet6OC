@@ -1,6 +1,7 @@
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
+import {AppConstants} from "../../../environments/app.constants";
 
 const httpOptions = {
   headers: new HttpHeaders(
@@ -28,7 +29,8 @@ export class LoginService {
   }
   connectGithub() : Observable<any>{
     return this.http.get<any>(
-      `http://localhost:8090/login/oauth2/authorize/github`,
+      //`http://localhost:8090/oauth2/authorize/github`,
+      AppConstants.GITHUB_AUTH_URL,
       httpOptions);
 
   }

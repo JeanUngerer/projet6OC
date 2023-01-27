@@ -29,7 +29,7 @@ export class UserService {
     .pipe(distinctUntilChanged());
 
   isUser(): Observable<any> {
-    return this.apiService.getNoAuth('/authi');
+    return this.apiService.get('/authi');
   }
 
   handleBalanceUpdate() {

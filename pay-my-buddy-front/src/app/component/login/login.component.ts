@@ -1,10 +1,11 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { LoginService} from "../../core/services/login.service";
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {AppConstants} from "../../../environments/app.constants";
 
 @Component({
   selector: 'app-login',
@@ -26,13 +27,27 @@ export class LoginComponent implements OnInit {
 
   displayLoginPage: boolean = false;
   hasAuthError: boolean = false;
+
+  googleURL = AppConstants.GOOGLE_AUTH_URL;
+  githubURL = AppConstants.GITHUB_AUTH_URL;
+
+
   constructor(
     private router: Router,
     private authService: AuthService,
     private loginService: LoginService,
+    private route: ActivatedRoute,
   ) {}
   ngOnInit(): void {
+    const token: string | null = this.route.snapshot.queryParamMap.get('token');
+    const error: string | null = this.route.snapshot.queryParamMap.get('error');
 
+    if(token){
+      console.log("Token : ", token);
+    }
+    else if (error) {
+      console.log("Error : ", error);
+    }
   }
 
   /**

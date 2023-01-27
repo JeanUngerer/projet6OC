@@ -73,12 +73,24 @@
         </button>
       </form>
       <div class="providers">
+
+
+        <a href="{{ googleURL }}">
+
+        </a>
+        <a href="{{ githubURL }}">
+
+        </a>
+
+        <button class="button login-button button-secondary">
+          Login with Google
+        </button>
+
         <button (click)="logGithub()" class="button login-button button-secondary">
           Login with Github
         </button>
-        <button (click)="logGithub()" class="button login-button button-secondary">
-          Login with Google
-        </button>
+
+
       </div>
     </div>
   </div>

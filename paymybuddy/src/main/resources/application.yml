@@ -10,9 +10,8 @@ spring:
           github:
             client-id: fea08f772bb001a15162
             client-secret: b6daab70e9336fa7d9d994ae9dd004b6a41d8c00
-            scope:
-              - email
-              - name
+
+
   jpa:
     generate-ddl: true
     show-sql: true
@@ -22,6 +21,10 @@ spring:
     url: jdbc:mysql://localhost:3306/pay_my_buddy
     username: root
     password: admin
+
+app:
+  oauth2:
+    authorizedRedirectUris: http://localhost:4200/login
 
 rsa:
   private-key: classpath:certs/private.pem
