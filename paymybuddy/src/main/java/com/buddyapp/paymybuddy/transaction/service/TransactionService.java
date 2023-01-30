@@ -126,7 +126,18 @@ public class TransactionService {
 
     public MyTransactionsDTO myTransactions(MyUser me) {
         MyTransactionsDTO myTransactionsDTO = new MyTransactionsDTO();
-        myTransactionsDTO.setMyTransactionList (customMapper.transactionsToMyTransactions(transactionMapper.entitiesToModel(transactionRepository.findAllByUser_UserId(me.getUserId()).get())));
+        myTransactionsDTO.setMyTransactionList (
+                customMapper.transactionsToMyTransactions(
+                        transactionMapper.entitiesToModel(
+                                transactionRepository.findAllByUser_UserId(me.getUserId()).get())
+
+        ));
+
+        myTransactionsDTO.getMyTransactionList().addAll(customMapper.transactionsToMyTransactions(
+                transactionMapper.entitiesToModel(
+                        transactionRepository.findAllByTrader_UserId(me.getUserId()).get()
+        )));
+
         return myTransactionsDTO;
     }
 }

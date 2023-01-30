@@ -130,12 +130,10 @@ public class TransactionControllerTest {
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         Transaction transaction = new Transaction(1L, 100.,0.,  "testTransaction for 100", userMapper.entityToModel(trader), userMapper.entityToModel(sender), LocalDateTime.now());
-
+        Transaction transaction2 = new Transaction(2L, 50.,0.,  "testTransaction for 100", userMapper.entityToModel(sender), userMapper.entityToModel(trader), LocalDateTime.now());
         transactionService.sendTransaction(transaction);
 
-        transaction.setTransactionId(2L);
-
-        transactionService.sendTransaction(transaction);
+        transactionService.sendTransaction(transaction2);
 
         String token = obtainAccessToken(sender.getUserName(), "pass1");
 
@@ -144,9 +142,11 @@ public class TransactionControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk()).andExpect(content()
                         .contentType("application/json"))
-                .andExpect(jsonPath("$.myTransactionList").isNotEmpty());
-
-
+                .andExpect(jsonPath("$.myTransactionList[0].receiverUsername").value("user2"))
+                .andExpect(jsonPath("$.myTransactionList[1].receiverUsername").value("user1"))
+                .andExpect(jsonPath("$.myTransactionList[0].amount").value(100.))
+                .andExpect(jsonPath("$.myTransactionList[1].amount").value(50.))
+        ;
     }
 
     public String obtainAccessToken(String username, String password) throws Exception {

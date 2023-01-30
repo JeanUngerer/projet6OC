@@ -31,6 +31,7 @@ public class Oauth2LoginHandler {
         Principal principal = (Principal) authentication;
 
         String userName = "oauth2user";
+        userName = principal.getName();
         try{
             userService.getUserByUserName(userName);
             setResponse(response, token);

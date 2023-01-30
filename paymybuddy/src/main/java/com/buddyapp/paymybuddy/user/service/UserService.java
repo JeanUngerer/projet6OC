@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -59,6 +60,8 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         // TODO add here a list of role if needed to do authorization
         return new org.springframework.security.core.userdetails.User(myUser.getUserName(), myUser.getPassword(), authi);
     }
+
+
 
     public List<MyUser> getUsers() {
         try {

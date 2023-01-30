@@ -14,4 +14,6 @@ public interface TransactionRepository extends JpaRepository<TransactionEntity, 
     Optional<List<TransactionEntity>> findAllByUser(UserEntity userEntity);
 
     Optional<List<TransactionEntity>> findAllByUser_UserId(Long userId);
+
+    Optional<List<TransactionEntity>> findAllByTrader_UserId(Long userId);
 }
