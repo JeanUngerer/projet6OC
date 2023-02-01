@@ -45,7 +45,7 @@ export class JWTService {
       console.log("Decode : ", decoded );
       return {
         role: decoded.scope as string,
-        email: decoded.sub as string,
+        username: decoded.sub as string,
         exp: decoded.exp,
       };
     }
@@ -54,7 +54,7 @@ export class JWTService {
 
   hasValidToken() {
     const authUser = this.getUserFromToken();
-    if (authUser && authUser.role && authUser.email && authUser.exp) {
+    if (authUser && authUser.role && authUser.username && authUser.exp) {
       const isValid = Date.now() <= authUser.exp * 1000;
       return isValid;
     }

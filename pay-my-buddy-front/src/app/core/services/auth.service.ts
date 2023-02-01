@@ -88,6 +88,18 @@ export class AuthService {
 
   /**
    *
+   * @returns Observable<string | undefined> coresponding to current user username
+   */
+  getUsername() {
+    return this.currentUser.pipe(
+      map((u) => {
+        return u.role || this.jwt.getUserFromToken()?.username;
+      })
+    );
+  }
+
+  /**
+   *
    * @returns a boolean to indicate if a token that has not expired is saved in localStorage
    * Real validity check on the token is done server-side
    */

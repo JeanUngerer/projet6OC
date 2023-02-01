@@ -15,6 +15,7 @@ public class MyTransaction {
     private double amount;
     private double fee;
     private String receiverUsername;
+    private String senderUsername;
     private LocalDateTime date;
     private String description;
 }

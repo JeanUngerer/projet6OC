@@ -88,6 +88,21 @@
 		</dependency>
 	</dependencies>
 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.7.1.1</version>
+				<configuration>
+					<xmlOutput>true</xmlOutput>
+					<!-- Optional directory to put spotbugs xdoc xml report -->
+					<xmlOutputDirectory>target/site</xmlOutputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -129,6 +144,34 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.7.1</version>
+			</plugin>
+
+
 		</plugins>
 	</build>
 

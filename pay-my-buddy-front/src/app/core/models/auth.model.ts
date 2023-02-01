@@ -1,6 +1,6 @@
 export interface AuthUser {
   role?: string;
-  email?: string;
+  username?: string;
   exp?: number;
 }
 

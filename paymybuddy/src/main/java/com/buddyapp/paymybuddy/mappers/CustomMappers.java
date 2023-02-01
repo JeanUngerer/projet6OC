@@ -87,6 +87,7 @@ public class CustomMappers {
         myTransaction.setDescription( transaction.getDescription() );
         myTransaction.setAmount(transaction.getAmount());
         myTransaction.setReceiverUsername(transactionEntity.getTrader().getUserName());
+        myTransaction.setSenderUsername(transactionEntity.getUser().getUserName());
 
         return myTransaction;
     }

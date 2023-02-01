@@ -7,6 +7,7 @@ import {MyContact} from "../../core/models/contact.model";
 import {ContactService} from "../../core/services/contact.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../core/services/user.service";
+import {AuthService} from "../../core/services/auth.service";
 
 @Component({
   selector: 'app-transfer',
@@ -17,7 +18,7 @@ export class TransferComponent implements OnInit{
 
   submitted = false;
   transfers: Transfer[] = [];
-  displayedColumns: string[] = ['sentTo', 'amount', 'fee', 'date', 'description'];
+  displayedColumns: string[] = ['sentTo','sentFrom', 'amount', 'fee', 'date', 'description'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   dataSource = new MatTableDataSource<Transfer>(this.transfers);
 
@@ -25,13 +26,19 @@ export class TransferComponent implements OnInit{
 
   usernameList:String[] = [];
 
+  myUsername = '';
+
   sentResponse:String = "";
 
   contactControl = new FormControl(null, [Validators.required]);
   amountControl = new FormControl(0, [Validators.min(0), Validators.required]);
+
+  descriptionControl = new FormControl(null);
+
   tranferForm = new FormGroup({
     contact: this.contactControl,
     amount: this.amountControl,
+    description: this.descriptionControl,
   });
 
   constructor(
@@ -39,12 +46,16 @@ export class TransferComponent implements OnInit{
     private transferService: TransferService,
     private contactService: ContactService,
     private userService: UserService,
+
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
       this.refreshTransfersList();
       this.refreshContactList();
       this.userService.handleBalanceUpdate();
+
+      this.authService.getUsername().subscribe({next: name => name? this.myUsername = name : this.myUsername = "notAuthenticated"});
   }
 
 
@@ -76,7 +87,8 @@ export class TransferComponent implements OnInit{
 
     this.transferService.sendNewTransfer({
       sendTo: this.contactList.filter(contact => contact.username === friendToSendTo)[0],
-      amount: this.transferAmount
+      amount: this.transferAmount,
+      description: this.transferDescription,
     }).subscribe({
       next:(r) => {
         console.log("RESULT : ", r);
@@ -102,6 +114,10 @@ export class TransferComponent implements OnInit{
       return amount;
     }
     return 0;
+  }
+
+  get transferDescription(){
+    return this.tranferForm.controls.description.value? this.tranferForm.controls.description.value : "";
   }
 
   hasError(field: string) {
