@@ -17,10 +17,10 @@ public class CustomOidcUserService extends OidcUserService {
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = super.loadUser(userRequest);
-        /*
+
         try {
-            return userService.processUserRegistration(userRequest.getClientRegistration().getRegistrationId(), oidcUser.getAttributes(), oidcUser.getIdToken(),
-                    oidcUser.getUserInfo());
+            //return userService.processUserOAuth2Registration(userRequest.getClientRegistration().getRegistrationId(), oidcUser.getAttributes(), oidcUser.getIdToken(),
+            //        oidcUser.getUserInfo());
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -28,7 +28,7 @@ public class CustomOidcUserService extends OidcUserService {
             // Throwing an instance of AuthenticationException will trigger the
             // OAuth2AuthenticationFailureHandler
             throw new OAuth2AuthenticationException(ex.getMessage());
-        }*/
+        }
 
 
         return null;

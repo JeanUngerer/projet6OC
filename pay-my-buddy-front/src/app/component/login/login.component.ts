@@ -39,14 +39,15 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
   ngOnInit(): void {
-    const token: string | null = this.route.snapshot.queryParamMap.get('token');
-    const error: string | null = this.route.snapshot.queryParamMap.get('error');
+    const code: string | null = this.route.snapshot.queryParamMap.get('code');
+    const state: string | null = this.route.snapshot.queryParamMap.get('state');
 
-    if(token){
-      console.log("Token : ", token);
-    }
-    else if (error) {
-      console.log("Error : ", error);
+    if(code && state) {
+      this.loginService.fetchToken(code, state)
+        .subscribe({
+          next:(r) => {console.log("RESULT : ", r); this.handleAuthSuccess()},
+          error:(err) => this.handleAuthError(err)}
+        );
     }
   }
 

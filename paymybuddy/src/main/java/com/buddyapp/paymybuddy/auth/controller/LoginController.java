@@ -61,7 +61,7 @@ public class LoginController {
 
 
 
-    @RequestMapping("/*")
+    @RequestMapping("/**")
     public String getUserInfo(Principal user) {
         StringBuffer userInfo= new StringBuffer();
 
@@ -75,9 +75,9 @@ public class LoginController {
     }
 
 
-    @RequestMapping("/**")
+    //@RequestMapping("/**")
     public String other(Principal user){
-        return "OTHER";
+        return user.toString();
     }
 
 

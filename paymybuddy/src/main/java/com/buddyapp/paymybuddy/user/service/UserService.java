@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,15 +30,16 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -202,4 +204,28 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         }
         return "Username issue while registering";
     }
+
+    /*
+    @Transactional
+    public OidcUser processUserOAuth2Registration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
+        if (StringUtils.isEmpty(oAuth2UserInfo.getName())) {
+            throw new OAuth2AuthenticationProcessingException("Name not found from OAuth2 provider");
+        } else if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
+            throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
+        }
+        SignUpRequest userDetails = toUserRegistrationObject(registrationId, oAuth2UserInfo);
+        MyUser user = findUserByEmail(oAuth2UserInfo.getEmail());
+        if (user != null) {
+            if (!user.getProvider().equals(registrationId) && !user.getProvider().equals(SocialProvider.LOCAL.getProviderType())) {
+                throw new OAuth2AuthenticationProcessingException(
+                        "Looks like you're signed up with " + user.getProvider() + " account. Please use your " + user.getProvider() + " account to login.");
+            }
+            user = updateExistingUser(user, oAuth2UserInfo);
+        } else {
+            user = registerNewUser(userDetails);
+        }
+
+        return LocalUser.create(user, attributes, idToken, userInfo);
+    }*/
 }

@@ -1,4 +1,4 @@
-package com.buddyapp.paymybuddy.auth.service;
+package com.buddyapp.paymybuddy.user.service;
 
 import com.buddyapp.paymybuddy.models.CustomOAuth2User;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

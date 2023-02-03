@@ -1,53 +1,39 @@
 package com.buddyapp.paymybuddy.auth.config;
 
 
-import com.buddyapp.paymybuddy.auth.service.CustomOAuth2UserService;
-import com.buddyapp.paymybuddy.auth.service.Oauth2LoginHandler;
-import com.buddyapp.paymybuddy.models.CustomOAuth2User;
+import com.buddyapp.paymybuddy.auth.service.Oauth2LoginFailureHandler;
+import com.buddyapp.paymybuddy.user.service.CustomOAuth2UserService;
+import com.buddyapp.paymybuddy.auth.service.OAuth2AccessTokenResponseConverterWithDefaults;
+import com.buddyapp.paymybuddy.auth.service.Oauth2LoginSuccessHandler;
 import com.buddyapp.paymybuddy.user.service.UserService;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
+import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -74,7 +60,10 @@ public class SpringSecurityConfig {
     private UserService userService;
 
     @Autowired
-    private Oauth2LoginHandler handler;
+    private Oauth2LoginSuccessHandler successHandler;
+
+    @Autowired
+    private Oauth2LoginFailureHandler failureHandler;
 
     private final UserService myUserDetailsService;
 
@@ -90,8 +79,7 @@ public class SpringSecurityConfig {
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/authi").permitAll()
+                        .requestMatchers("/register", "/login**", "/oauth2/**", "/authi").permitAll()
                         .anyRequest().authenticated()
                         )
                 //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -99,20 +87,24 @@ public class SpringSecurityConfig {
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
                 .oauth2Login(oauth -> oauth
-                        //.tokenEndpoint(authentication -> handler.generateToken())
-                        //.accessTokenResponseClient()
-                        //.userInfoEndpoint()
-                       // .userService(customOAuth2UserService)
-                      //  .and()
+
+                        //.authorizationEndpoint()
+                        //.authorizationRequestRepository( new InMemoryRequestRepository() )
+                        //.and()
+                        .redirectionEndpoint()
+                        .and()
+                        .userInfoEndpoint()
+                        //.userService(userService)
+                        .and()
+                        .tokenEndpoint()
+                        .and()
                         .successHandler((request, response, authentication) -> {
-
-                            handler.onAuthenticationSuccess(request, response, authentication);
-
+                            successHandler.onAuthenticationSuccess(request, response, authentication);
                             //response.setHeader("Token", "token");
                         })
                         .failureHandler((request, response, exception) -> {
-                            request.getSession().setAttribute("error.message", exception.getMessage());
-                            handler.onAuthenticationFailure(request, response, exception);
+                            //request.getSession().setAttribute("error.message", exception.getMessage());
+                            failureHandler.onAuthenticationFailure(request, response, exception);
                         }))
                 //.oauth2Login(withDefaults())
                 .httpBasic(withDefaults())
@@ -121,15 +113,26 @@ public class SpringSecurityConfig {
 
 
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration configuration = new CorsConfiguration();
         configuration.applyPermitDefaultValues();
         configuration.addExposedHeader("Token");
         configuration.addAllowedMethod(HttpMethod.PUT);
+        //configuration.setAllowedMethods( Collections.singletonList( "*" ) );
+        //configuration.setAllowedOrigins( Collections.singletonList( "*" ) );
+        //configuration.setAllowedHeaders( Collections.singletonList( "*" ) );
         source.registerCorsConfiguration("/**",configuration);
         return source;
     }
-
-
+/*
+    private OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authorizationCodeTokenResponseClient() {
+        OAuth2AccessTokenResponseHttpMessageConverter tokenResponseHttpMessageConverter = new OAuth2AccessTokenResponseHttpMessageConverter();
+        tokenResponseHttpMessageConverter.setTokenResponseConverter(new OAuth2AccessTokenResponseConverterWithDefaults());
+        RestTemplate restTemplate = new RestTemplate(Arrays.asList(new FormHttpMessageConverter(), tokenResponseHttpMessageConverter));
+        restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
+        DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
+        tokenResponseClient.setRestOperations(restTemplate);
+        return tokenResponseClient;
+    }*/
 }
