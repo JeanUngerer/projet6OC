@@ -42,8 +42,9 @@ export class LoginComponent implements OnInit {
     const code: string | null = this.route.snapshot.queryParamMap.get('code');
     const state: string | null = this.route.snapshot.queryParamMap.get('state');
 
-    if(code && state) {
-      this.loginService.fetchToken(code, state)
+    const stateCalc = state?.substring(0, state?.length-1) + "%3D";
+    if(code && stateCalc) {
+      this.loginService.fetchToken(code, stateCalc)
         .subscribe({
           next:(r) => {console.log("RESULT : ", r); this.handleAuthSuccess()},
           error:(err) => this.handleAuthError(err)}
@@ -110,10 +111,10 @@ export class LoginComponent implements OnInit {
   }
 
   logGithub(){
-    const res = this.loginService.connectGithub().subscribe({
+    const res = this.loginService.connectGithub() /*.subscribe({
       next: (res) => console.log("GITHUB RES : ", res),
       error: (err) => console.log("GITHUB ERROR : ", err)
-    });
+    })*/;
     console.log("RES : ", res);
   }
 
