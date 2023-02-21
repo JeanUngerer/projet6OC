@@ -119,8 +119,12 @@ public class SpringSecurityConfig {
         configuration.applyPermitDefaultValues();
         configuration.addExposedHeader("Token");
         configuration.addAllowedMethod(HttpMethod.PUT);
+
+        configuration.setAllowCredentials(true);
+
         //configuration.setAllowedMethods( Collections.singletonList( "*" ) );
-        //configuration.setAllowedOrigins( Collections.singletonList( "*" ) );
+        configuration.setAllowedOrigins( Collections.singletonList( "http://localhost:4200" ) );
+        configuration.addAllowedOrigin ( "http://localhost:8090" );
         //configuration.setAllowedHeaders( Collections.singletonList( "*" ) );
         source.registerCorsConfiguration("/**",configuration);
         return source;

@@ -44,7 +44,7 @@ export class LoginService {
 
   fetchToken(code : string, state : string): Observable<any> {
     return this.http.get(
-      AppConstants.GITHUB_CODE_URL + '?code=' + code + '&state=' + state,
+      AppConstants.GITHUB_CODE_URL + '?code=' + code + '&state=' + state + "&redirect_uri=http://localhost:4200/login",
       {
         withCredentials: true,
         observe: 'response',

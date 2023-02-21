@@ -62,7 +62,7 @@ public class LoginController {
 
 
     @RequestMapping("/**")
-    public String getUserInfo(Principal user) {
+    public ResponseEntity<MessageDTO> getUserInfo(Principal user) {
         StringBuffer userInfo= new StringBuffer();
 
         if(user instanceof UsernamePasswordAuthenticationToken){
@@ -71,7 +71,22 @@ public class LoginController {
         else if(user instanceof OAuth2AuthenticationToken){
             userInfo.append(getOauth2LoginInfo(user));
         }
-        return userInfo.toString();
+
+        String token =tokenService.generateToken((Authentication) user);
+
+
+        if(!token.isEmpty()){
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Token", token);
+            return ResponseEntity.ok()
+                    .headers(responseHeaders)
+                    .build();
+        }
+
+
+
+        return ResponseEntity.ok(new MessageDTO(userInfo.toString()));
+
     }
 
 
@@ -162,7 +177,7 @@ public class LoginController {
             String userToken = authClient.getAccessToken().getTokenValue();
             protectedInfo.append("Welcome, " + userAttributes.get("name")+"<br><br>");
             protectedInfo.append("e-mail: " + userAttributes.get("email")+"<br><br>");
-            protectedInfo.append("Access Token: " + userToken+"<br><br>");
+            //protectedInfo.append("Access Token: " + userToken+"<br><br>");
 
             if(idToken != null) {
 
