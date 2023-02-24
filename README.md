@@ -2,4 +2,4 @@
 
 Schemas/DBdiagram.png
 
-![db_diagram](https://github.com/[JeanUngerer]/[projet6OC]/Schemas/[front-init]/DBdiagram.png?raw=true)
+![db_diagram](https://github.com/JeanUngerer/projet6OC/front-init/Schemas/DBdiagram.png?raw=true)
