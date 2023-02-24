@@ -1,4 +1,4 @@
-package com.buddyapp.paymybuddy.helper.annotations.example;
+package com.buddyapp.paymybuddy.helper.annotations.feeTax;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

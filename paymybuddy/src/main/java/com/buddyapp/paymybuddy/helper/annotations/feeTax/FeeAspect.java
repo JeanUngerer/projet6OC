@@ -1,4 +1,4 @@
-package com.buddyapp.paymybuddy.helper.annotations.example;
+package com.buddyapp.paymybuddy.helper.annotations.feeTax;
 
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
@@ -23,7 +23,7 @@ import static com.buddyapp.paymybuddy.constants.FeesRate.FEE_RATE;
 
 @Aspect
 @Component
-public class ExampleAspect {
+public class FeeAspect {
 
     @Autowired
     private UserService userService;
@@ -38,7 +38,7 @@ public class ExampleAspect {
     private UserRepository userRepository;
     private final PlatformTransactionManager transactionManager;
 
-    public ExampleAspect(PlatformTransactionManager transactionManager) {
+    public FeeAspect(PlatformTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 

@@ -11,6 +11,11 @@ spring:
             client-id: fea08f772bb001a15162
             client-secret: b6daab70e9336fa7d9d994ae9dd004b6a41d8c00
             redirect-uri: http://localhost:4200/login
+          google:
+            client-id: 907285264927-2fuj8gmhslfphq0eems1dqib6t92j5su.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:4200/login
+            scope: openid,profile,email
 
 
   jpa:

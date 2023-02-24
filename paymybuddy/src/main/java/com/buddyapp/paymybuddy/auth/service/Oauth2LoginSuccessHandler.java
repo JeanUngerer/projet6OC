@@ -89,34 +89,4 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         return UriComponentsBuilder.fromUriString(targetUrl).build().toUriString();
     }
 
-    public void OLDonAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-
-        String token = tokenService.generateToken(authentication);
-        Principal principal = (Principal) authentication;
-
-        String userName = "oauth2user";
-        userName = principal.getName();
-        try{
-            userService.getUserByUserName(userName);
-            setResponse(response, token);
-            return;
-
-        } catch (Exception e){
-            //aint got shit
-        }
-        userService.createOauth2User(new UserDTO("NoMail goten from " + userName, userName,"No auth via password for " + userName, null,
-                null, null, authentication.getAuthorities().toString(), 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GITHUB);
-
-        setResponse(response, token);
-    }
-
-
-
-    protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
-        super.clearAuthenticationAttributes(request);
-    }
-    private void setResponse(HttpServletResponse response, String token) {
-        response.setHeader("Token", token);
-    }
-
 }

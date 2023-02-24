@@ -1,12 +1,11 @@
 package com.buddyapp.paymybuddy.transaction.service;
 
 
-import com.buddyapp.paymybuddy.DTOs.MyContactsDTO;
 import com.buddyapp.paymybuddy.DTOs.MyTransactionsDTO;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.exception.ExceptionHandler;
-import com.buddyapp.paymybuddy.helper.annotations.example.TransactionFee;
+import com.buddyapp.paymybuddy.helper.annotations.feeTax.TransactionFee;
 import com.buddyapp.paymybuddy.mappers.CustomMappers;
 import com.buddyapp.paymybuddy.mappers.TransactionMapper;
 import com.buddyapp.paymybuddy.mappers.UserMapper;

@@ -10,5 +10,6 @@ export class AppConstants {
   public static GITHUB_AUTH_URL = AppConstants.OAUTH2_URL + "github" + AppConstants.REDIRECT_URL;
 
   public static GITHUB_CODE_URL = AppConstants.OAUTH2_CODE_URL + "github";
+  public static GOOGLE_CODE_URL = AppConstants.OAUTH2_CODE_URL + "google";
 
 }
