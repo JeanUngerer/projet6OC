@@ -18,6 +18,8 @@ import { RegistrationComponent } from './component/registration/registration.com
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatTableModule} from "@angular/material/table";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { GithubCallbackComponent } from './component/login/providerCallbacks/github-callback/github-callback.component';
+import { GoogleCallbackComponent } from './component/login/providerCallbacks/google-callback/google-callback.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     UserInfoComponent,
     TransferComponent,
     ContactsComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    GithubCallbackComponent,
+    GoogleCallbackComponent
   ],
   imports: [
     BrowserModule,
