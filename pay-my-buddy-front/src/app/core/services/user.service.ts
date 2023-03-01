@@ -55,12 +55,16 @@ export class UserService {
     return this.apiService.put(`/${environment.apiUser}/addfunds`, addFunds);
   }
 
+  withdrawFunds(withdrawFunds: AddFundsDTO): Observable<MyBalanceDTO> {
+    return this.apiService.put(`/${environment.apiUser}/withdrawfunds`, withdrawFunds);
+  }
+
   getMyBalance(){
     return this.myBalance;
   }
 
-  setMyBalance(balance: Number){
-    this.myBalance = balance;
+  setMyBalance(balance: number){
+    this.generalDataLoadingSubject.next(balance);
   }
 
 }

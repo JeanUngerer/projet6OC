@@ -19,6 +19,10 @@ export class UserInfoComponent implements OnInit{
     amount: this.amountControl,
   });
 
+  withdrawMoneyForm = new FormGroup({
+    amount: this.amountControl,
+  });
+
 
   constructor(
     private userService: UserService,
@@ -57,8 +61,34 @@ export class UserInfoComponent implements OnInit{
     );
   }
 
+  withdrawFunds(){
+
+    this.submitted = true;
+
+    if(!this.withdrawMoneyForm.valid){return;}
+
+    this.userService.withdrawFunds({
+      amount: this.withdrawAmount
+    }).subscribe({
+      next:(r) => {
+        console.log("RESULT : ", r);
+
+        this.submitted = false;
+        this.userService.handleBalanceUpdate();},
+      error:(err) => console.log("ERROR : ", err)}
+    );
+  }
+
   get addAmount() {
     const amount = this.addMoneyForm.get('amount')?.value;
+    if (amount){
+      return amount;
+    }
+    return 0;
+  }
+
+  get withdrawAmount() {
+    const amount = this.withdrawMoneyForm.get('amount')?.value;
     if (amount){
       return amount;
     }

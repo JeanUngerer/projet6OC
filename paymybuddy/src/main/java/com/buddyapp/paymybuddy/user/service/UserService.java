@@ -177,6 +177,20 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         }
     }
 
+    public double withdrawFundFromApp(double amount, Long userId) {
+        try {
+            UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
+                    -> new ExceptionHandler("We could not find your account"));
+            if(userEntity.getBalance() < amount) {throw new ExceptionHandler("Not enough");}
+            userEntity.setBalance(userEntity.getBalance() - amount);
+            userRepository.save(userEntity);
+            return userEntity.getBalance();
+        } catch (Exception e) {
+            log.error("Couldn't find user: " + e.getMessage());
+            throw new ExceptionHandler("We could not withdraw your funds from your account");
+        }
+    }
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         return null;

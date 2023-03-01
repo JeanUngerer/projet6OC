@@ -94,5 +94,13 @@ public class UserController {
         return ResponseEntity.ok( new MyBalanceDTO(userService.insertFundIntoApp(dto.getAmount(), me.getUserId())) );
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/withdrawfunds")
+    public ResponseEntity<MyBalanceDTO> withdrawFunds(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddFundsDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+
+        return ResponseEntity.ok( new MyBalanceDTO(userService.withdrawFundFromApp(dto.getAmount(), me.getUserId())) );
+    }
+
 
 }
