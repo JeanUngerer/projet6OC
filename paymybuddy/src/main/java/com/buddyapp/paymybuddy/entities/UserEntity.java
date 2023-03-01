@@ -35,8 +35,6 @@ public class UserEntity {
     @Column(name = "username", unique = true, nullable = false, length = 50)
     String userName;
 
-
-
     @Column(name = "password", nullable = false)
     String password;
 
