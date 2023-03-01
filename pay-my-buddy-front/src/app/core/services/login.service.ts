@@ -62,9 +62,9 @@ export class LoginService {
       }));
   }
 
-  fetchTokenGoogle(code : string, state : string): Observable<any> {
+  fetchTokenGoogle(code : string, state : string, scope: string, authuser: string, prompt: string): Observable<any> {
     return this.http.get(
-      AppConstants.GOOGLE_CODE_URL + '?code=' + code + '&state=' + state + "&redirect_uri=http://localhost:4200/login",
+      AppConstants.GOOGLE_CODE_URL + '?state=' + state + '&code=' + code + '&scope=' + scope + '&authuser=' + authuser + '&prompt=' + prompt,
       {
         withCredentials: true,
         observe: 'response',

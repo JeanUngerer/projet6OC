@@ -39,36 +39,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
   ngOnInit(): void {
-    const code: string | null = this.route.snapshot.queryParamMap.get('code');
-    const state: string | null = this.route.snapshot.queryParamMap.get('state');
-    const provider: string = this.loginService.providerSelected;
 
-    const stateCalc = state?.substring(0, state?.length-1) + "%3D";
-    if(code && stateCalc) {
-      if (provider === "github") {
-        this.loginService.fetchTokenGithub(code, stateCalc)
-          .subscribe({
-              next: (r) => {
-                console.log("RESULT : ", r);
-                this.handleAuthSuccess()
-              },
-              error: (err) => this.handleAuthError(err)
-            }
-          );
-      }
-
-      else if (provider === "google") {
-        this.loginService.fetchTokenGoogle(code, stateCalc)
-          .subscribe({
-              next: (r) => {
-                console.log("RESULT : ", r);
-                this.handleAuthSuccess()
-              },
-              error: (err) => this.handleAuthError(err)
-            }
-          );
-      }
-    }
   }
 
   /**
