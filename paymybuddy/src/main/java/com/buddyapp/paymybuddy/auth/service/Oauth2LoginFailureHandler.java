@@ -16,7 +16,6 @@ import java.io.IOException;
 import static com.buddyapp.paymybuddy.constants.CookiesName.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Service
-@Transactional
 public class Oauth2LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {

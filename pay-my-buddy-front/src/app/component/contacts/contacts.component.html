@@ -3,8 +3,12 @@
 <div class="transferModal">
   <div class="content" *ngIf="readyToDisplay">
 
-    <label class="mat-card-title">List of contacts</label>
-    <br><br>
+
+    <label class="mat-card-title label">List of contacts</label>
+    <div class="display-card">
+
+
+    <br>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -39,12 +43,13 @@
     >
     </mat-paginator>
 
+    </div>
+
     <br><br>
+
     <label class="label">New Contact</label>
-    <br><br>
 
-
-    <form class="contact-form" [formGroup]="newContactForm" (ngSubmit)="addContactByUsername()">
+    <form class="contact-form display-card" [formGroup]="newContactForm" (ngSubmit)="addContactByUsername()">
 
       <label class="form-group-label label">Username</label>
       <div class="form-group">

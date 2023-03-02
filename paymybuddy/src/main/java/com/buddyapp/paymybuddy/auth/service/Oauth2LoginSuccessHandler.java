@@ -32,7 +32,6 @@ import java.util.Optional;
 import static com.buddyapp.paymybuddy.constants.CookiesName.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Service
-@Transactional
 public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired

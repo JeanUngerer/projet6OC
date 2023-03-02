@@ -1,9 +1,6 @@
 package com.buddyapp.paymybuddy.user.controller;
 
-import com.buddyapp.paymybuddy.DTOs.AddFundsDTO;
-import com.buddyapp.paymybuddy.DTOs.MyBalanceDTO;
-import com.buddyapp.paymybuddy.DTOs.MyTransactionsDTO;
-import com.buddyapp.paymybuddy.DTOs.UserDTO;
+import com.buddyapp.paymybuddy.DTOs.*;
 import com.buddyapp.paymybuddy.auth.service.TokenService;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
 import com.buddyapp.paymybuddy.models.MyUser;
@@ -102,5 +99,54 @@ public class UserController {
         return ResponseEntity.ok( new MyBalanceDTO(userService.withdrawFundFromApp(dto.getAmount(), me.getUserId())) );
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/phone")
+    public ResponseEntity<ProfileModificationDTO> setMyPhone(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody ProfileModificationDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+        me.setPhoneNumber(dto.getModification());
+        me = userService.updateUser(userMapper.modelToDto(me));
+        return ResponseEntity.ok(new ProfileModificationDTO(me.getPhoneNumber()));
+    }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @GetMapping("/phone")
+    public ResponseEntity<ProfileModificationDTO> getMyPhone(@RequestHeader("Authorization") String requestTokenHeader){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+
+        return ResponseEntity.ok( new ProfileModificationDTO(me.getPhoneNumber()));
+    }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @GetMapping("/fname")
+    public ResponseEntity<ProfileModificationDTO> getMyFirstname(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddFundsDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+
+        return ResponseEntity.ok( new ProfileModificationDTO(me.getFirstName()));
+    }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/fname")
+    public ResponseEntity<ProfileModificationDTO> setMyFirstname(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody ProfileModificationDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+        me.setFirstName(dto.getModification());
+        me = userService.updateUser(userMapper.modelToDto(me));
+        return ResponseEntity.ok(new ProfileModificationDTO(me.getPhoneNumber()));
+    }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @GetMapping("/lname")
+    public ResponseEntity<ProfileModificationDTO> getMyLastname(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddFundsDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+
+        return ResponseEntity.ok( new ProfileModificationDTO(me.getLastName()));
+    }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
+    @PutMapping("/lname")
+    public ResponseEntity<ProfileModificationDTO> setMyLastname(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody ProfileModificationDTO dto){
+        MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
+        me.setLastName(dto.getModification());
+        me = userService.updateUser(userMapper.modelToDto(me));
+        return ResponseEntity.ok(new ProfileModificationDTO(me.getPhoneNumber()));
+    }
 }

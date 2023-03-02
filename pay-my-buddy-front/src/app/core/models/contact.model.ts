@@ -3,6 +3,7 @@ export interface MyContact {
   firstname: string;
   lastname: string;
   username: string;
+  identifier: string;
 }
 
 export interface MyContactsDTO {

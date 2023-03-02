@@ -12,5 +12,6 @@ import lombok.Setter;
 @Setter
 public class TransactionToSendDTO {
     private MyContact sendTo;
+    private String description;
     private double amount;
 }
