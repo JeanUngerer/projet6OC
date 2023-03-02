@@ -74,7 +74,7 @@ public class TransactionController {
     @PutMapping("/sendmoney")
     public ResponseEntity<MessageDTO> sendMoney(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody TransactionToSendDTO transactionDTO){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
-        MyUser target = userService.getUserByUserName(transactionDTO.getSendTo().getUsername());
+        MyUser target = userService.getUserByUserName(transactionDTO.getSendTo().getIdentifier());
         Transaction transaction = new Transaction(null, transactionDTO.getAmount(), 0., transactionDTO.getDescription(), target, me, LocalDateTime.now());
         transactionService.sendTransaction(transaction);
         return ResponseEntity.ok(new MessageDTO("Transaction sent to user : " + target.getUserName()));

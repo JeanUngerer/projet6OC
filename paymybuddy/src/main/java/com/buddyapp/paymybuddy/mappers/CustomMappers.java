@@ -34,8 +34,9 @@ public class CustomMappers {
         ContactEntity contactEntityFromRep = contactRepository.findById(contact.getContactId()).get();
         myContact.setFirstname(contactEntityFromRep.getFriend().getFirstName());
         myContact.setLastname(contactEntityFromRep.getFriend().getLastName());
-        myContact.setUsername(contactEntityFromRep.getFriend().getUserName());
+        myContact.setUsername(contactEntityFromRep.getFriend().getLogin());
         myContact.setMail(contactEntityFromRep.getFriend().getEmail());
+        myContact.setIdentifier(contactEntityFromRep.getFriend().getUserName());
 
 
         return myContact;
