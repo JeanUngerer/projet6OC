@@ -6,6 +6,7 @@ import {MatPaginator} from "@angular/material/paginator";
 import {MatTableDataSource} from "@angular/material/table";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {TransferService} from "../../core/services/transfer.service";
+import {identity} from "rxjs";
 
 @Component({
   selector: 'app-contacts',
@@ -57,16 +58,16 @@ export class ContactsComponent implements OnInit{
 
   addContactByUsername(){
     this.submitted = true;
-    let username = "";
+    let identifier = "";
     if(!this.newContactForm.controls.contactName.valid)
     {
       console.log("BAD REQUEST : username not valid");
       return;
     }
     // @ts-ignore
-    username = this.newContactForm.controls.contactName.value;
+    identifier = this.newContactForm.controls.contactName.value;
 
-    this.contactService.addContactByUsername(username)
+    this.contactService.addContactByUsername(identifier)
       .subscribe({
       next: res => {
         this.contactList = res.myContacts,

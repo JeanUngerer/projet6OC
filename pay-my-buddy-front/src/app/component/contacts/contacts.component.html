@@ -51,12 +51,12 @@
 
     <form class="contact-form display-card" [formGroup]="newContactForm" (ngSubmit)="addContactByUsername()">
 
-      <label class="form-group-label label">Username</label>
+      <label class="form-group-label label">User identifier</label>
       <div class="form-group">
         <input
           type="text"
           id="contactName"
-          placeholder="Enter contact Name"
+          placeholder="Enter contact Identifier"
           class="input"
           [ngClass]="{
                   'input-error': hasError('contactName')
