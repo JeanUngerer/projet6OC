@@ -68,9 +68,9 @@ public class TransactionControllerTest {
     @Test
     public void sendTransactionAPI() throws Exception
     {
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1", passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2", passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         String requestJson = "{ \"transactionId\":1, \"amount\":100.0, \"description\":\"testTransaction for 100\", " +
@@ -99,9 +99,9 @@ public class TransactionControllerTest {
 
     @Test
     public void sendMoneyAPI() throws Exception {
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         TransactionToSendDTO transaction = new TransactionToSendDTO(new MyContact("mail2@mail.com", "firsteName2",
@@ -124,9 +124,9 @@ public class TransactionControllerTest {
 
     @Test
     public void myTransactionsAPI() throws Exception {
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         Transaction transaction = new Transaction(1L, 100.,0.,  "testTransaction for 100", userMapper.entityToModel(trader), userMapper.entityToModel(sender), LocalDateTime.now());

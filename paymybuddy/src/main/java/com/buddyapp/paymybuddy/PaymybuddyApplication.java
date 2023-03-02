@@ -35,25 +35,11 @@ public class PaymybuddyApplication {
 	@Bean
 	CommandLineRunner commandLineRunner(UserService users, PasswordEncoder encoder) {
 		return args -> {
-			/*
-			users.save(new UserEntity(null, Provider.LOCAL, "mailadmin.com", "usernameAdmin", encoder.encode("password"),"firstName" ,
-					"lastName", "0606060606", "ROLE_ADMIN", 1000.,
-					null, null);
-			new UserEntity(contacts, null, Provider.LOCAL, "mailadmin.com", "usernameAdmin", encoder.encode("password"),"firstName" ,
-					"lastName", "0606060606", "ROLE_ADMIN", 1000.,
-					new ArrayList<ContactEntity>())
-
-			users.save(new UserEntity(null, Provider.LOCAL,  "mailuser.com", "usernameUser", encoder.encode("password"),"firstNameU" ,
-					"lastNameU", "0606060606", "ROLE_USER", 1000.,
-					new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));*/
-
-
-			users.createUser(new UserDTO("mailadmin.com", "usernameAdmin", "password","firstName" ,
+			users.createUser(new UserDTO("mailadmin.com", "usernameAdmin", "usernameAdmin", "password","firstName" ,
 					"lastName", "0606060606", "ROLE_ADMIN", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
 
-			users.createUser(new UserDTO("mailuser.com", "usernameUser", "password","firstNameU" ,
+			users.createUser(new UserDTO("mailuser.com", "usernameUser", "usernameUser", "password","firstNameU" ,
 					"lastNameU", "0606060606", "ROLE_USER", 1000., new ArrayList<Contact>(), new ArrayList<Transaction>()));
-
 		};
 	}
 

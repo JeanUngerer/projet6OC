@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -31,6 +32,7 @@ import java.util.Optional;
 import static com.buddyapp.paymybuddy.constants.CookiesName.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Service
+@Transactional
 public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Autowired
@@ -83,12 +85,12 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         switch (provider) {
             case "github":
-                userService.createOauth2User(new UserDTO("NoMail goten from #" + userName, attributes.get("login").toString() + " #" + userName,"", null,
-                        null, null, authentication.getAuthorities().toString(), 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GITHUB);
+                userService.createOauth2User(new UserDTO("NoMail goten from #" + userName, userName, attributes.get("login").toString(),"", null,
+                        null, null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GITHUB);
                 break;
             case "google":
-                userService.createOauth2User(new UserDTO(attributes.get("email").toString(), attributes.get("name").toString() + " #" + userName, "", attributes.get("given_name").toString(),
-                        attributes.get("family_name").toString(), null, authentication.getAuthorities().toString(), 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GOOGLE);
+                userService.createOauth2User(new UserDTO(attributes.get("email").toString(), userName, attributes.get("name").toString(), "", attributes.get("given_name").toString(),
+                        attributes.get("family_name").toString(), null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()), Provider.GOOGLE);
                 break;
             default:
                 throw new ExceptionHandler("Identity provider not recognized");

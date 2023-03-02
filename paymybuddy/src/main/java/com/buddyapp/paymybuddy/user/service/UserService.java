@@ -210,7 +210,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     }
 
     public String registerUser(RegistrationDTO registration){
-        UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), registration.getPassword(),
+        UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), registration.getUsername(), registration.getPassword(),
                 registration.getFirstname(), registration.getLastname(),null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>());
         MyUser newMe = createUser(newUser);
         if(newMe.getUserName().contentEquals(registration.getUsername())){

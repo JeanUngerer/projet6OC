@@ -58,9 +58,9 @@ public class ContactControllerTest {
 
 
     private List<UserEntity> setupUsers() {
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
         List<UserEntity> userList = new ArrayList<UserEntity>();
         userList.add(sender);
@@ -197,9 +197,9 @@ public class ContactControllerTest {
     @Test
     public void addContactByUsernameAPI() throws Exception {
 
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         AddContactByNameDTO addContactByNameDTO = new AddContactByNameDTO("user2");
@@ -221,9 +221,9 @@ public class ContactControllerTest {
     @Test
     public void addContactByMailAPI() throws Exception {
 
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         AddContactByMailDTO addContactByMailDTO = new AddContactByMailDTO("mail2@mail.com");
@@ -244,9 +244,9 @@ public class ContactControllerTest {
 
     @Test
     public void removeContactByUsernameAPI() throws Exception {
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         contactService.addContactByUsername("user1", userMapper.entityToModel(trader));
@@ -268,9 +268,9 @@ public class ContactControllerTest {
 
     @Test
     public void  myContactsAPI() throws Exception {
-        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1",passwordEncoder.encode("pass1"), "firsteName1",
+        UserEntity sender = userRepository.save(new UserEntity(3l, Provider.LOCAL, "mail1@mail.com", "user1", "user1",passwordEncoder.encode("pass1"), "firsteName1",
                 "lastName1", "0101010101", "ROLE_USER", 1000., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
-        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2",passwordEncoder.encode("pass2"), "firsteName2",
+        UserEntity trader = userRepository.save(new UserEntity(4l, Provider.LOCAL, "mail2@mail.com", "user2", "user2",passwordEncoder.encode("pass2"), "firsteName2",
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         contactService.addContactByUsername("user2", userMapper.entityToModel(sender));

@@ -18,6 +18,7 @@ public class MyUser {
     String provider;
     String email;
     String userName;
+    String login;
     String password;
     String firstName;
     String lastName;

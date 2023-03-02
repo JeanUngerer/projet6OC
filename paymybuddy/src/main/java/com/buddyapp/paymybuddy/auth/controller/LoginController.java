@@ -4,6 +4,7 @@ package com.buddyapp.paymybuddy.auth.controller;
 import com.buddyapp.paymybuddy.DTOs.MessageDTO;
 import com.buddyapp.paymybuddy.DTOs.RegistrationDTO;
 import com.buddyapp.paymybuddy.auth.service.TokenService;
+import com.buddyapp.paymybuddy.models.CustomOAuth2User;
 import com.buddyapp.paymybuddy.user.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -122,7 +123,7 @@ public class LoginController {
         log.info("Authi");
         if(requestTokenHeader == null || requestTokenHeader.equals("")){return ResponseEntity.ok(new MessageDTO("Not AUthenticated !"));}
 
-        return ResponseEntity.ok(new MessageDTO("Hi " + tokenService.decodeTokenUsername(requestTokenHeader)));
+        return ResponseEntity.ok(new MessageDTO("Hi " + userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader)).getLogin()));
 
     }
 
@@ -172,7 +173,11 @@ public class LoginController {
 
         if(authToken.isAuthenticated()){
 
-            Map<String,Object> userAttributes = ((DefaultOAuth2User) authToken.getPrincipal()).getAttributes();
+            CustomOAuth2User user0Auth2 = new CustomOAuth2User( (OAuth2User) authToken.getPrincipal());
+
+            Map<String, Object> userAttributes = user0Auth2.getAttributes();
+
+            //Map<String,Object> userAttributes = ((DefaultOAuth2User) authToken.getPrincipal()).getAttributes();
 
             String userToken = authClient.getAccessToken().getTokenValue();
             protectedInfo.append("Welcome, " + userAttributes.get("name")+"<br><br>");
