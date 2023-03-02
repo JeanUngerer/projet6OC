@@ -32,5 +32,37 @@
 
     </form>
 
+    <br><br>
+
+    <form class="transfer-form" [formGroup]="withdrawMoneyForm" (ngSubmit)="withdrawFunds()">
+
+      <label class="form-group-label label">Withdraw funds from your wallet</label>
+      <div class="form-group">
+        <input
+          type="number"
+          id="withdraw-amount"
+          placeholder="Enter amount"
+          class="input"
+          [ngClass]="{
+                  'input-error': hasError('withdraw-amount')
+                }"
+          formControlName="amount"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && hasError('withdraw-amount')"
+          message="Please provide a valid amount"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-primary" type="submit">
+        Withdraw Funds
+      </button>
+
+
+
+    </form>
+
   </div>
 </div>
