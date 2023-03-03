@@ -24,6 +24,9 @@ une adresse e-mail ou un compte de réseaux sociaux;
 * MySql,
 * Générée en code first
 * Par défaut sur le port 3306, (modifier le port dans les fichiers application.yml et application-test.yml)
+* Variables d'environement à setup :
+  * DBUSER représente datasource.username
+  * DBPASS représente datasource.password
 
 ##### SpringBoot backend
 * à partir de la racine du projet : cd paymybuddy
