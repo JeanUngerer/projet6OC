@@ -24,9 +24,9 @@ spring:
     hibernate:
       ddl-auto: create-drop
   datasource:
-    url: jdbc:mysql://localhost:3306/pay_my_buddy
-    username: root
-    password: admin1
+    url: jdbc:mysql://localhost:3306/pay_my_buddy?createDatabaseIfNotExist=true
+    username: ${DBUSER}
+    password: ${DBPASS}
 
 app:
   oauth2:

@@ -1,5 +1,58 @@
-# projet6OC
+# projet6OC - Pay My Buddy
 
-Schemas/DBdiagram.png
+Projet de formation Openclassroom
+
+### Contexte
+Problème à résoudre : transactions d’argent peu pratiques :
+* les banques ont actuellement un processus long et peu pratique de configuration d'un
+transfert d'argent ;
+* les transferts bancaires demandent trop de données (numéro de compte, code SWIFT,
+etc.) ;
+* il est difficile de rembourser ou de transférer de l'argent à des amis ou de la famille. Il
+est difficile de transférer de l'argent vers des comptes pour des achats.
+
+### Solution :
+* développer une application où les utilisateurs pourraient s'enregistrer facilement avec
+une adresse e-mail ou un compte de réseaux sociaux;
+* les utilisateurs peuvent ajouter des amis à leur réseau pour leur transférer de l'argent;
+* passer par une conception simple pour rationaliser la procédure et éviter les soucis.
+
+
+### Installation
+
+##### Database
+* MySql,
+* Générée en code first
+* Par défaut sur le port 3306, (modifier le port dans les fichiers application.yml et application-test.yml)
+
+##### SpringBoot backend
+* à partir de la racine du projet : cd paymybuddy
+* mvn install
+* par défaut le serveur spring se lance sur le port 8090 (modifier dans application.yml)
+* cd target
+* java -jar paymybuddy-0.0.1-SNAPSHOT.jar
+* A des fins de démonstration la database et réinitialiser à chaquelancement de l'application.
+
+Deux utilisateurs sont générés avec les credentials suivants :
+* usernameAdmin/password
+* usernameUser/password
+
+Dans cette application en particulier l'Admin n'as pas de possibilités d'actions supplémentaire car il n'y a pas de backOffice.
+
+
+##### Angular Frontend
+* à partir de la racine du projet : cd pay-my-buddy-front
+* utilise angular/cli ~15.0.4
+* npm install pour installer les package node
+* npm start pour lancer le web development server.
+* Home @ http://localhost:4200/home par défaut
+
+
+
+### Schéma de base de données
 
 ![db_diagram](https://github.com/JeanUngerer/projet6OC/blob/front-init/Schemas/DBdiagram.png?raw=true)
+
+
+### Diagramme de classe
+![db_diagram](https://github.com/JeanUngerer/projet6OC/blob/front-init/Schemas/paymybuddy.png?raw=true)
