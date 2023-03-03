@@ -1,20 +1,15 @@
 package com.buddyapp.paymybuddy.transaction;
 
 import com.buddyapp.paymybuddy.DTOs.TransactionToSendDTO;
-import com.buddyapp.paymybuddy.DTOs.UserDTO;
 import com.buddyapp.paymybuddy.constants.Provider;
 import com.buddyapp.paymybuddy.entities.ContactEntity;
 import com.buddyapp.paymybuddy.entities.TransactionEntity;
 import com.buddyapp.paymybuddy.entities.UserEntity;
 import com.buddyapp.paymybuddy.mappers.UserMapper;
-import com.buddyapp.paymybuddy.models.Contact;
 import com.buddyapp.paymybuddy.models.MyContact;
 import com.buddyapp.paymybuddy.models.Transaction;
-import com.buddyapp.paymybuddy.models.MyUser;
 import com.buddyapp.paymybuddy.transaction.service.TransactionService;
 import com.buddyapp.paymybuddy.user.repository.UserRepository;
-import com.buddyapp.paymybuddy.user.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +100,7 @@ public class TransactionControllerTest {
                 "lastName2", "0202020202", "ROLE_USER", 0., new ArrayList<ContactEntity>(), new ArrayList<TransactionEntity>()));
 
         TransactionToSendDTO transaction = new TransactionToSendDTO(new MyContact("mail2@mail.com", "firsteName2",
-                "lastName2","user2"), 100);
+                "lastName2","user2", "user2"), 100, "descc");
 
         String token = obtainAccessToken(sender.getUserName(), "pass1");
 

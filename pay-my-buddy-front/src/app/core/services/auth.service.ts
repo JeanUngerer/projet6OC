@@ -93,7 +93,7 @@ export class AuthService {
   getUsername() {
     return this.currentUser.pipe(
       map((u) => {
-        return u.role || this.jwt.getUserFromToken()?.username;
+        return u.username || this.jwt.getUserFromToken()?.username;
       })
     );
   }

@@ -6,7 +6,19 @@
     <a routerLink="contact">Contacts</a>
   </div>
 
-  <div class="right">
+  <div class="right" *ngIf="!logged">
+    <a class="login" routerLink="/login" (click)="handleClickLogout()">
+    Login
+    </a>
+
+  </div>
+
+  <div class="right" *ngIf="logged">
+    <div class="balance" >My Identifier : {{myIdentifier}}</div>
+
+
+    <div class="balance" >My Balance : {{myBalance | currency:'EUR'}}</div>
+
     <a class="logout" routerLink="/login" (click)="handleClickLogout()">
       <img
         src="assets/images/logout.svg"
@@ -14,7 +26,5 @@
         class="logout"
       />
     </a>
-
-    <div class="balance">My Balance : {{myBalance}} €</div>
   </div>
 </div>

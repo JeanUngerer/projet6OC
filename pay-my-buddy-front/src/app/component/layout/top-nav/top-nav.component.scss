@@ -28,10 +28,16 @@
 }
 
 .logout{
-  align-self: self-end;
+  align-self: end;
   height: 1.4em;
   width: 1.4em;
   fill: currentColor;
+}
+
+
+.login{
+  font-weight: bold;
+  color: yellowgreen !important;
 }
 
 
@@ -39,15 +45,20 @@
 
 
 .balance{
+  float: left;
   line-height: 50px;
   color: #dddddd;
   vertical-align: middle;
-  align-self: end;
+  align-self: self-end;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-left: white 1px solid;
+
 
 }
 
 .right{
-  width: 210px;
+  width: 600px;
 }
 
 .next-to-other{

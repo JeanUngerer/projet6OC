@@ -11,6 +11,8 @@ import {distinctUntilChanged} from "rxjs/operators";
 })
 export class TopNavComponent implements OnInit{
 
+
+  logged : boolean = false;
   constructor(
 
     private authService: AuthService,
@@ -20,12 +22,24 @@ export class TopNavComponent implements OnInit{
   latestBalanceUpdate$ = this.userService.latestBalanceUpdateSubject
     .asObservable()
 
-  myBalance : Number = 0;
+  myBalance : string = '0';
+
+  myIdentifier? : string = "";
   ngOnInit(): void {
-    this.myBalance = this.userService.getMyBalance();
+
+    this.logged = this.authService.isLoggedIn();
+
+    this.myBalance = this.userService.getMyBalance().toString();
+
+    this.authService.getUsername().subscribe({
+      next: (v) => {this.myIdentifier = v;
+        this.logged = this.authService.isLoggedIn();
+        console.log("UPDATE username : ", v)}
+    })
 
     this.userService.isLoadingGeneralData.subscribe({
-      next: (v) => {this.myBalance = v;
+      next: (v) => {this.myBalance = v.toString();
+        this.logged = this.authService.isLoggedIn();
         console.log("UPDATE BALANCE : ", v)}
     })
   }
@@ -34,7 +48,7 @@ export class TopNavComponent implements OnInit{
   }
 
   handleBalanceChange(){
-    return this.latestBalanceUpdate$.pipe(r => {this.myBalance = this.userService.getMyBalance(); return of(null)})
+    return this.latestBalanceUpdate$.pipe(r => {this.myBalance = this.userService.getMyBalance().toString(); return of(null)})
   }
 
 

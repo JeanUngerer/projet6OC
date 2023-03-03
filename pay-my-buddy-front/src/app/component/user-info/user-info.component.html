@@ -31,8 +31,7 @@
 
 
     </form>
-
-    <br><br>
+    <br>
 
     <form class="transfer-form" [formGroup]="withdrawMoneyForm" (ngSubmit)="withdrawFunds()">
 
@@ -44,13 +43,13 @@
           placeholder="Enter amount"
           class="input"
           [ngClass]="{
-                  'input-error': hasError('withdraw-amount')
+                  'input-error': !withdrawMoneyForm.valid
                 }"
           formControlName="amount"
           (change)="resetSubmitted()"
         />
         <app-error-message
-          [visible]="submitted && hasError('withdraw-amount')"
+          [visible]="submitted && !withdrawMoneyForm.valid"
           message="Please provide a valid amount"
         >
         </app-error-message>
@@ -59,9 +58,96 @@
       <button class="button login-button button-primary" type="submit">
         Withdraw Funds
       </button>
+    </form>
 
 
+    <br>
 
+    <form class="transfer-form" [formGroup]="editPhoneNumberForm" (ngSubmit)="modifPhone()">
+
+      <label class="form-group-label label">Phone Number : {{currentPhone}}</label>
+      <div class="form-group">
+        <input
+          type="text"
+          id="update-phone"
+          placeholder="Enter new phone Number"
+          class="input"
+          [ngClass]="{
+                  'input-error': !editPhoneNumberForm.valid
+                }"
+          formControlName="modif"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !editPhoneNumberForm.valid"
+          message="Please provide a valid phone number"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-dangerous" type="submit">
+        Edit phone Number
+      </button>
+    </form>
+
+
+    <br>
+
+    <form class="transfer-form" [formGroup]="editFnameForm" (ngSubmit)="modifFname()">
+
+      <label class="form-group-label label">Firstname : {{currentFname}}</label>
+      <div class="form-group">
+        <input
+          type="text"
+          id="update-firstname"
+          placeholder="Enter new firstname"
+          class="input"
+          [ngClass]="{
+                  'input-error': !editFnameForm.valid
+                }"
+          formControlName="modif"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !editFnameForm.valid"
+          message="Please provide a valid firstname"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-dangerous" type="submit">
+        Edit FirstName
+      </button>
+    </form>
+
+
+    <br>
+
+    <form class="transfer-form" [formGroup]="editLnameForm" (ngSubmit)="modifLname()">
+
+      <label class="form-group-label label">Lastname : {{currentLname}}</label>
+      <div class="form-group">
+        <input
+          type="text"
+          id="update-lastname"
+          placeholder="Enter new lastname"
+          class="input"
+          [ngClass]="{
+                  'input-error': !editLnameForm.valid
+                }"
+          formControlName="modif"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !editLnameForm.valid"
+          message="Please provide a valid Lastname"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-dangerous" type="submit">
+        Edit Lastname
+      </button>
     </form>
 
   </div>

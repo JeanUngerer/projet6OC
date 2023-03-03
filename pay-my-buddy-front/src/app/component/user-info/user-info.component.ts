@@ -23,6 +23,24 @@ export class UserInfoComponent implements OnInit{
     amount: this.amountControl,
   });
 
+  modificationControl = new FormControl(null);
+  editPhoneNumberForm = new FormGroup({
+    modif: this.modificationControl,
+  });
+
+
+
+  editFnameForm = new FormGroup({
+    modif: this.modificationControl,
+  });
+
+  editLnameForm = new FormGroup({
+    modif: this.modificationControl,
+  });
+
+  currentPhone? = "";
+  currentFname? = "";
+  currentLname? = "";
 
   constructor(
     private userService: UserService,
@@ -32,6 +50,16 @@ export class UserInfoComponent implements OnInit{
 
   ngOnInit(): void {
     this.userService.handleBalanceUpdate();
+    this.userService.getPhoneNumber().subscribe( {
+      next: (v) => {v.modification? this.currentPhone = v.modification : this.currentPhone = 'Not Specified';
+      console.log("CURRENT PHONE : ", v.modification)}
+    })
+    this.userService.getFirstname().subscribe({
+      next: (v) => {v.modification? this.currentFname = v.modification : this.currentFname = 'Not Specified'}
+    })
+    this.userService.getLastname().subscribe({
+      next: (v) => {v.modification? this.currentLname = v.modification : this.currentLname = 'Not Specified'}
+    })
   }
 
   hasError(field: string) {
@@ -79,6 +107,30 @@ export class UserInfoComponent implements OnInit{
     );
   }
 
+  modifPhone(){
+    if(!this.editPhoneNumberForm.valid){return;}
+
+    this.userService.setPhoneNumber({modification:this.newPhone}).subscribe({
+      next: (v) => {this.currentPhone = v.modification}
+    });
+  }
+
+  modifFname(){
+    if(!this.editPhoneNumberForm.valid){return;}
+
+    this.userService.setFirstname({modification:this.newFname}).subscribe({
+      next: (v) => {this.currentFname = v.modification}
+    });
+  }
+
+  modifLname(){
+    if(!this.editPhoneNumberForm.valid){return;}
+
+    this.userService.setLastname({modification:this.newLname}).subscribe({
+      next: (v) => {this.currentLname = v.modification}
+    });
+  }
+
   get addAmount() {
     const amount = this.addMoneyForm.get('amount')?.value;
     if (amount){
@@ -93,6 +145,30 @@ export class UserInfoComponent implements OnInit{
       return amount;
     }
     return 0;
+  }
+
+  get newPhone(){
+    const newValue = this.editPhoneNumberForm.controls.modif.value;
+    if (newValue){
+      return newValue;
+    }
+    return undefined;
+  }
+
+  get newFname(){
+    const newValue = this.editFnameForm.controls.modif.value;
+    if (newValue){
+      return newValue;
+    }
+    return undefined;
+  }
+
+  get newLname(){
+    const newValue = this.editLnameForm.controls.modif.value;
+    if (newValue){
+      return newValue;
+    }
+    return undefined;
   }
 
 

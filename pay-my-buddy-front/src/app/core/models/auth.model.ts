@@ -16,3 +16,7 @@ export interface LoginUser {
   username: string;
   password: string;
 }
+
+export interface ProfileModificationDTO {
+  modification?: string;
+}

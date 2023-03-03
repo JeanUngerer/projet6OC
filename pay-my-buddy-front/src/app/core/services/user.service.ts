@@ -8,6 +8,7 @@ import {environment} from "../../../environments/environment";
 import {LoginWatcher} from "./loginWatcher.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MyContact} from "../models/contact.model";
+import {ProfileModificationDTO} from "../models/auth.model";
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,30 @@ export class UserService {
 
   getBalance(): Observable<MyBalanceDTO> {
     return this.apiService.get(`/${environment.apiUser}/mybalance`);
+  }
+
+  getPhoneNumber(): Observable<ProfileModificationDTO> {
+    return this.apiService.get(`/${environment.apiUser}/phone`);
+  }
+
+  setPhoneNumber(newPhoneNumber : ProfileModificationDTO): Observable<ProfileModificationDTO> {
+    return this.apiService.put(`/${environment.apiUser}/phone`, newPhoneNumber);
+  }
+
+  getFirstname(): Observable<ProfileModificationDTO> {
+    return this.apiService.get(`/${environment.apiUser}/fname`);
+  }
+
+  setFirstname(newFname : ProfileModificationDTO): Observable<ProfileModificationDTO> {
+    return this.apiService.put(`/${environment.apiUser}/fname`, newFname);
+  }
+
+  getLastname(): Observable<ProfileModificationDTO> {
+    return this.apiService.get(`/${environment.apiUser}/lname`);
+  }
+
+  setLastname(newLname : ProfileModificationDTO): Observable<ProfileModificationDTO> {
+    return this.apiService.put(`/${environment.apiUser}/lname`, newLname);
   }
 
   addFunds(addFunds: AddFundsDTO): Observable<MyBalanceDTO> {

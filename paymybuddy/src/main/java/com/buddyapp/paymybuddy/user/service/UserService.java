@@ -59,7 +59,6 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         MyUser myUser = userMapper.entityToModel(userEntity);
         List<SimpleGrantedAuthority> authi = new ArrayList<>();
         authi.add(new SimpleGrantedAuthority(myUser.getRoles()));
-        // TODO add here a list of role if needed to do authorization
         return new org.springframework.security.core.userdetails.User(myUser.getUserName(), myUser.getPassword(), authi);
     }
 
@@ -103,22 +102,6 @@ public class UserService implements UserDetailsService, OAuth2UserService {
             throw new ExceptionHandler("We could not create your account");
         }
     }
-
-    /*
-    public User updateUser(UserDTO dto) {
-        try {
-            User user = userMapper.dtoToModel(dto);
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-            UserEntity userEntity = userRepository.findById(user.getUserId()).orElseThrow(()
-                    -> new ExceptionHandler("We could not find your account"));
-            userMapper.updateUserFromModel(user, userEntity, new CycleAvoidingMappingContext());
-            userRepository.save(userEntity);
-            return user;
-        } catch (Exception e) {
-            log.error("Couldn't update user: " + e.getMessage());
-            throw new ExceptionHandler("We could not update your account");
-        }
-    }*/
 
     public MyUser getUserById(Long id) {
         try {
@@ -218,28 +201,4 @@ public class UserService implements UserDetailsService, OAuth2UserService {
         }
         return "Username issue while registering";
     }
-
-    /*
-    @Transactional
-    public OidcUser processUserOAuth2Registration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
-        if (StringUtils.isEmpty(oAuth2UserInfo.getName())) {
-            throw new OAuth2AuthenticationProcessingException("Name not found from OAuth2 provider");
-        } else if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
-            throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
-        }
-        SignUpRequest userDetails = toUserRegistrationObject(registrationId, oAuth2UserInfo);
-        MyUser user = findUserByEmail(oAuth2UserInfo.getEmail());
-        if (user != null) {
-            if (!user.getProvider().equals(registrationId) && !user.getProvider().equals(SocialProvider.LOCAL.getProviderType())) {
-                throw new OAuth2AuthenticationProcessingException(
-                        "Looks like you're signed up with " + user.getProvider() + " account. Please use your " + user.getProvider() + " account to login.");
-            }
-            user = updateExistingUser(user, oAuth2UserInfo);
-        } else {
-            user = registerNewUser(userDetails);
-        }
-
-        return LocalUser.create(user, attributes, idToken, userInfo);
-    }*/
 }

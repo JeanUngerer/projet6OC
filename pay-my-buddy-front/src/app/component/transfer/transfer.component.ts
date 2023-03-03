@@ -33,7 +33,7 @@ export class TransferComponent implements OnInit{
   contactControl = new FormControl(null, [Validators.required]);
   amountControl = new FormControl(0, [Validators.min(0), Validators.required]);
 
-  descriptionControl = new FormControl(null);
+  descriptionControl = new FormControl(null, Validators.maxLength(255));
 
   tranferForm = new FormGroup({
     contact: this.contactControl,
@@ -111,6 +111,7 @@ export class TransferComponent implements OnInit{
   get transferAmount() {
     const amount = this.tranferForm.get('amount')?.value;
     if (amount){
+      console.log("AMMMOUUNNNTT : ", amount);
       return amount;
     }
     return 0;

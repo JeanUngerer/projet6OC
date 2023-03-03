@@ -118,7 +118,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
     @GetMapping("/fname")
-    public ResponseEntity<ProfileModificationDTO> getMyFirstname(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddFundsDTO dto){
+    public ResponseEntity<ProfileModificationDTO> getMyFirstname(@RequestHeader("Authorization") String requestTokenHeader){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
 
         return ResponseEntity.ok( new ProfileModificationDTO(me.getFirstName()));
@@ -135,7 +135,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_USER', 'SCOPE_ROLE_ADMIN', 'SCOPE_OAUTH2_USER')")
     @GetMapping("/lname")
-    public ResponseEntity<ProfileModificationDTO> getMyLastname(@RequestHeader("Authorization") String requestTokenHeader, @RequestBody AddFundsDTO dto){
+    public ResponseEntity<ProfileModificationDTO> getMyLastname(@RequestHeader("Authorization") String requestTokenHeader){
         MyUser me = userService.getUserByUserName(tokenService.decodeTokenUsername(requestTokenHeader));
 
         return ResponseEntity.ok( new ProfileModificationDTO(me.getLastName()));

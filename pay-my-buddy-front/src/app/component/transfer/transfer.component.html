@@ -52,12 +52,12 @@
                 [ngClass]="{
                       'input-error': hasError('description')
                     }"
-                formControlName="amount"
+                formControlName="description"
                 (change)="resetSubmitted()"
               />
               <app-error-message
                 [visible]="submitted && hasError('amount')"
-                message="Please provide a valid amount"
+                message="limited to 255 characters"
               >
               </app-error-message>
             </div>
@@ -77,11 +77,9 @@
       </div>
 
       <br>
-
+      <label class="mat-card-title label">List of transfers</label>
       <div class="display-card">
 
-        <label class="mat-card-title label">List of transfers</label>
-        <br>
 
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
