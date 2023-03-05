@@ -24,4 +24,10 @@ public class ContactEntity {
     @JoinColumn(name = "user_id")
     UserEntity user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "friend_id")
+    UserEntity friend;
+
+
+
 }

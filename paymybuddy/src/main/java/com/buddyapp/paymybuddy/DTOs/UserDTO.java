@@ -16,12 +16,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    Long userId;
     String email;
+    String userName;
+    String login;
     String password;
     String firstName;
     String lastName;
     String phoneNumber;
+    String roles;
     Double balance;
     List<Contact> contacts;
     List<Transaction> transactions;

@@ -1,0 +1,141 @@
+
+<div class="root">
+  <div class="registrationModal">
+    <div class="content">
+
+      <app-error-message
+        message="Could not register user"
+        [visible]="hasRegisterError"
+      >
+      </app-error-message>
+
+
+    <form class="register-form" [formGroup]="registerForm" (ngSubmit)="register()">
+      <label class="label">Registration Form</label>
+      <div class="form-group">
+        <input
+          type="text"
+          placeholder="Enter username"
+          id="username"
+          [ngClass]="{
+                'input-error': hasError('username')
+              }"
+          class="input"
+          formControlName="username"
+          (change)="handleChange()"
+        />
+        <app-error-message
+          [visible]="hasError('username')"
+          message="Please provide a valid username"
+        >
+        </app-error-message>
+      </div>
+
+
+        <div class="form-group">
+          <input
+            type="text"
+            placeholder="Enter email"
+            id="email"
+            [ngClass]="{
+                'input-error': hasError('email')
+              }"
+            class="input"
+            formControlName="email"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('email')"
+            message="Please provide a valid email"
+          >
+          </app-error-message>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            class="input"
+            [ngClass]="{
+                'input-error': hasError('password')
+              }"
+            formControlName="password"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('password')"
+            message="Please provide a valid password"
+          >
+          </app-error-message>
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            id="passwordMatch"
+            placeholder="Enter matching password"
+            class="input"
+            [ngClass]="{
+                'input-error': hasError('passwordMatch')
+              }"
+            formControlName="passwordMatch"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('passwordMatch')"
+            message="Has to match password"
+          >
+          </app-error-message>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="text"
+            id="firstname"
+            placeholder="Enter firstname"
+            class="input"
+            [ngClass]="{
+                'input-error': hasError('firstname')
+              }"
+            formControlName="firstname"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('firstname')"
+            message="Please provide a valid firstname"
+          >
+          </app-error-message>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="text"
+            id="lastname"
+            placeholder="Enter lastname"
+            class="input"
+            [ngClass]="{
+                'input-error': hasError('lastname')
+              }"
+            formControlName="lastname"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('lastname')"
+            message="Please provide a valid lastname"
+          >
+          </app-error-message>
+        </div>
+
+        <button class="button login-button button-primary" type="submit">
+          Register
+        </button>
+      </form>
+
+      <button (click)="goToHome()" class="button login-button button-secondary">
+        Back to Home
+      </button>
+
+    </div>
+  </div>
+</div>
+

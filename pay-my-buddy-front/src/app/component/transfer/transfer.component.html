@@ -1,0 +1,134 @@
+
+  <div class="transferModal">
+    <div class="content">
+
+      <label class="form-group-label label">New Transfer</label>
+
+      <div class="transfer-form display-card">
+
+        <form class="transfer-form"  [formGroup]="tranferForm" (ngSubmit)="sendMoney()">
+          <div class="transfer-form">
+            <div class="form-group">
+              <label class="form-group-label label">Send To</label>
+              <ng-select [items]="usernameList"
+                         placeholder="Select contact to send money to"
+
+                         (change)="resetSubmitted()"
+                         formControlName="contact">
+              </ng-select>
+              <app-error-message
+                [visible]="submitted && hasError('email')"
+                message="Please select a contact"
+              >
+              </app-error-message>
+            </div>
+            <label class="form-group-label label">Amount</label>
+            <div class="form-group">
+              <input
+                type="number"
+                id="amount"
+                placeholder="Enter amount"
+                class="input"
+                [ngClass]="{
+                      'input-error': hasError('amount')
+                    }"
+                formControlName="amount"
+                (change)="resetSubmitted()"
+              />
+              <app-error-message
+                [visible]="submitted && hasError('amount')"
+                message="Please provide a valid amount"
+              >
+              </app-error-message>
+            </div>
+
+            <label class="form-group-label label">Description</label>
+            <div class="form-group">
+              <input
+                type="text"
+                id="description"
+                placeholder="Enter description"
+                class="input"
+                [ngClass]="{
+                      'input-error': hasError('description')
+                    }"
+                formControlName="description"
+                (change)="resetSubmitted()"
+              />
+              <app-error-message
+                [visible]="submitted && hasError('amount')"
+                message="limited to 255 characters"
+              >
+              </app-error-message>
+            </div>
+
+            <div class ="result" *ngIf="sentResponse !== ''">{{sentResponse}}</div>
+          </div>
+
+          <div class="next-to-other">
+            <button class="button login-button button-primary" type="submit">
+              Send
+            </button>
+          </div>
+          <br>
+        </form>
+
+
+      </div>
+
+      <br>
+      <label class="mat-card-title label">List of transfers</label>
+      <div class="display-card">
+
+
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <ng-container matColumnDef="sentTo">
+            <th mat-header-cell *matHeaderCellDef> Sent To </th>
+            <td mat-cell *matCellDef="let element"> {{element.receiverUsername}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="sentFrom">
+            <th class="topraw" mat-header-cell *matHeaderCellDef> Sent From </th>
+            <td mat-cell *matCellDef="let element"> {{element.senderUsername}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef> Amount </th>
+            <td mat-cell *matCellDef="let element" class="{{myUsername === element.senderUsername? 'negative' : 'positive'}}"> {{element.amount | currency:'EUR'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fee">
+            <th mat-header-cell *matHeaderCellDef> Transfer Fees </th>
+            <td mat-cell *matCellDef="let element"> {{element.fee | currency:'EUR'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.date | date}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20, 50]"
+          [pageSize]="10"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+
+      </div>
+
+
+    </div>
+  </div>
+
+
+

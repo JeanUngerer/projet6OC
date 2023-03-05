@@ -1,0 +1,93 @@
+@import "../../../styles.scss";
+
+.root {
+  background-color: lightgray;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginModal {
+  box-sizing: border-box;
+  background-color: whitesmoke;
+  border-radius: 1em;
+  border: 3px solid black;
+  box-shadow: grey;
+  width: 20vw;
+  min-width: 30em;
+  flex-direction: column;
+  display: flex;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.content{
+  padding-top: 1em;
+  width: 30em;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group{
+  margin-bottom: 2rem;
+
+}
+
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button-home{
+  align-content: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.login-button{
+  display: flex;
+  align-content: center;
+}
+
+.button-validate{
+  width: 10rem;
+  margin-bottom: 1rem;
+  margin-top: 2em;
+}
+
+.button-primary{
+  margin-bottom: 1rem;
+}
+
+.button-secondary{
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+
+.remember-checkbox{
+  padding-right: 20em;
+}
+
+.providers{
+  display: flex;
+  flex-direction: row;
+}
+
+.social-login .btn-img {
+  width: 30px;
+  height: auto;
+  padding: 0.6rem 0;
+  margin-right: 15px;
+}

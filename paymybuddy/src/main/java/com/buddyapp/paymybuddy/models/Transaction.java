@@ -1,18 +1,20 @@
 package com.buddyapp.paymybuddy.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
     Long transactionId;
     Double amount;
+    Double fee;
     String description;
-    User trader;
-    User user;
+    MyUser trader;
+    MyUser myUser;
+    LocalDateTime date;
 }
