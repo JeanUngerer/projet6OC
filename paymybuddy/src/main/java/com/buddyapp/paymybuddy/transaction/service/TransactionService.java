@@ -56,6 +56,7 @@ public class TransactionService {
 
     public List<Transaction> findAllUserTransactions(Long userId) {
         try {
+            log.info("findAllUserTransactions");
             UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
             return transactionMapper.entitiesToModel(transactionRepository.findAllByUser(userEntity).orElseThrow());
@@ -67,6 +68,7 @@ public class TransactionService {
 
     public Transaction findTransactionById(Long id) {
         try {
+            log.info("findTransactionById - id: " + id.toString());
             TransactionEntity transactionEntity = transactionRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your transaction"));
             return transactionMapper.entityToModel(transactionEntity);
@@ -79,7 +81,7 @@ public class TransactionService {
     @TransactionFee
     public Transaction sendTransaction(Transaction transaction) {
         try {
-
+            log.info("sendTransaction - transaction: " + transaction.toString());
             MyUser trader = userService.getUserById(transaction.getTrader().getUserId());
             MyUser myUser = userService.getUserById(transaction.getMyUser().getUserId());
 
@@ -110,6 +112,7 @@ public class TransactionService {
 
                     } catch (Throwable t) {
                         transactionStatus.setRollbackOnly();
+                        log.error("Error during the new balances attribution : " + t.getMessage());
                         throw new ExceptionHandler( "Error during the new balances attribution : " + t.getMessage());
                     }
                     return null;
@@ -124,19 +127,25 @@ public class TransactionService {
     }
 
     public MyTransactionsDTO myTransactions(MyUser me) {
-        MyTransactionsDTO myTransactionsDTO = new MyTransactionsDTO();
-        myTransactionsDTO.setMyTransactionList (
-                customMapper.transactionsToMyTransactions(
-                        transactionMapper.entitiesToModel(
-                                transactionRepository.findAllByUser_UserId(me.getUserId()).get())
+        try {
+            log.info("myTransactions - " + me.getUserName());
+            MyTransactionsDTO myTransactionsDTO = new MyTransactionsDTO();
+            myTransactionsDTO.setMyTransactionList(
+                    customMapper.transactionsToMyTransactions(
+                            transactionMapper.entitiesToModel(
+                                    transactionRepository.findAllByUser_UserId(me.getUserId()).get())
 
-        ));
+                    ));
 
-        myTransactionsDTO.getMyTransactionList().addAll(customMapper.transactionsToMyTransactions(
-                transactionMapper.entitiesToModel(
-                        transactionRepository.findAllByTrader_UserId(me.getUserId()).get()
-        )));
+            myTransactionsDTO.getMyTransactionList().addAll(customMapper.transactionsToMyTransactions(
+                    transactionMapper.entitiesToModel(
+                            transactionRepository.findAllByTrader_UserId(me.getUserId()).get()
+                    )));
 
-        return myTransactionsDTO;
+            return myTransactionsDTO;
+        } catch (Exception e) {
+            log.error("Couldn't compute your transactions list: " + e.getMessage());
+            throw new ExceptionHandler("We could not compute your transactions list");
+        }
     }
 }

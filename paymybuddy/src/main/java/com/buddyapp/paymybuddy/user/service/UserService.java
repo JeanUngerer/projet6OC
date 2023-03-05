@@ -66,6 +66,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public List<MyUser> getUsers() {
         try {
+            log.info("getUsers");
             List<UserEntity> users = userRepository.findAll();
             return userMapper.entitiesToModel(users);
         } catch (Exception e) {
@@ -77,6 +78,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser createUser(UserDTO dto) {
         try {
+            log.info("create user - userDTO: " + dto.toString());
             MyUser myUser = userMapper.dtoToModel(dto);
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
             myUser.setProvider(String.valueOf(Provider.LOCAL));
@@ -91,6 +93,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser createOauth2User (UserDTO dto, Provider provider){
         try {
+            log.info("createOauth2User - userDTO: " + dto.toString() + " - provider: " + provider);
             MyUser myUser = userMapper.dtoToModel(dto);
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
             myUser.setProvider(String.valueOf(provider));
@@ -105,6 +108,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser getUserById(Long id) {
         try {
+            log.info("getUserById - id: " + id.toString());
             return userMapper.entityToModel(userRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account")));
         } catch (Exception e) {
@@ -115,6 +119,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser getUserByEmail(String email) {
         try {
+            log.info("getUserByEmail - email: " + email);
             return userMapper.entityToModel(userRepository.findByEmail(email).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account")));
         } catch (Exception e) {
@@ -125,6 +130,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser getUserByUserName(String userName) {
         try {
+            log.info("getUserByUserName - userName: " + userName);
             MyUser mee =userMapper.entityToModel(userRepository.findByUserName(userName).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account")));
             return userMapper.entityToModel(userRepository.findByUserName(userName).orElseThrow(()
@@ -137,6 +143,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public String deleteUser(Long id) {
         try {
+            log.info("deleteUser - id: " + id.toString());
             UserEntity userEntity = userRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
             userRepository.delete(userEntity);
@@ -149,19 +156,21 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public double insertFundIntoApp(double amount, Long userId) {
         try {
+            log.info("insertFundIntoApp - userId: " + userId.toString() + " - amount: " + amount);
             UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
             userEntity.setBalance(userEntity.getBalance() + amount);
             userRepository.save(userEntity);
             return userEntity.getBalance();
         } catch (Exception e) {
-            log.error("Couldn't find user: " + e.getMessage());
+            log.error("insertFundIntoApp: " + e.getMessage());
             throw new ExceptionHandler("We could not put your fund in your account");
         }
     }
 
     public double withdrawFundFromApp(double amount, Long userId) {
         try {
+            log.info("withdrawFundFromApp - userId: " + userId.toString() + " - amount: " + amount);
             UserEntity userEntity = userRepository.findById(userId).orElseThrow(()
                     -> new ExceptionHandler("We could not find your account"));
             if(userEntity.getBalance() < amount) {throw new ExceptionHandler("Not enough");}
@@ -169,7 +178,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
             userRepository.save(userEntity);
             return userEntity.getBalance();
         } catch (Exception e) {
-            log.error("Couldn't find user: " + e.getMessage());
+            log.error("withdrawFundFromApp: " + e.getMessage());
             throw new ExceptionHandler("We could not withdraw your funds from your account");
         }
     }
@@ -181,6 +190,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
 
     public MyUser updateUser(UserDTO dto) {
         try {
+            log.info("updateUser - UserDTO: " + dto.toString());
             MyUser myUser = userMapper.entityToModel(userRepository.findByUserName(dto.getUserName()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your user")));
             userMapper.updateUserFromDto(dto, myUser, new CycleAvoidingMappingContext());
@@ -193,12 +203,18 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     }
 
     public String registerUser(RegistrationDTO registration){
-        UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), registration.getUsername(), registration.getPassword(),
-                registration.getFirstname(), registration.getLastname(),null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>());
-        MyUser newMe = createUser(newUser);
-        if(newMe.getUserName().contentEquals(registration.getUsername())){
-            return "Registered";
+        try {
+            log.info("registerUser - RegistrationDTO: " + registration.toString());
+            UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), registration.getUsername(), registration.getPassword(),
+                    registration.getFirstname(), registration.getLastname(), null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>());
+            MyUser newMe = createUser(newUser);
+            if (newMe.getUserName().contentEquals(registration.getUsername())) {
+                return "Registered";
+            }
+            return "Username issue while registering";
+        } catch (Exception e) {
+            log.error("registerUser: " + e.getMessage());
+            throw new ExceptionHandler("We could not register your user");
         }
-        return "Username issue while registering";
     }
 }

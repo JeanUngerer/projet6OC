@@ -73,7 +73,6 @@ public class SpringSecurityConfig {
                         .requestMatchers("/register", "/login**", "/oauth2/**", "/authi").permitAll()
                         .anyRequest().authenticated()
                         )
-                //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
