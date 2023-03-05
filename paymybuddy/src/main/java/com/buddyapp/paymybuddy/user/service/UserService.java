@@ -163,7 +163,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
             userRepository.save(userEntity);
             return userEntity.getBalance();
         } catch (Exception e) {
-            log.error("Couldn't find user: " + e.getMessage());
+            log.error("insertFundIntoApp: " + e.getMessage());
             throw new ExceptionHandler("We could not put your fund in your account");
         }
     }
@@ -178,7 +178,7 @@ public class UserService implements UserDetailsService, OAuth2UserService {
             userRepository.save(userEntity);
             return userEntity.getBalance();
         } catch (Exception e) {
-            log.error("Couldn't find user: " + e.getMessage());
+            log.error("withdrawFundFromApp: " + e.getMessage());
             throw new ExceptionHandler("We could not withdraw your funds from your account");
         }
     }
@@ -203,13 +203,18 @@ public class UserService implements UserDetailsService, OAuth2UserService {
     }
 
     public String registerUser(RegistrationDTO registration){
-        log.info("registerUser - RegistrationDTO: " + registration.toString());
-        UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), registration.getUsername(), registration.getPassword(),
-                registration.getFirstname(), registration.getLastname(),null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>());
-        MyUser newMe = createUser(newUser);
-        if(newMe.getUserName().contentEquals(registration.getUsername())){
-            return "Registered";
+        try {
+            log.info("registerUser - RegistrationDTO: " + registration.toString());
+            UserDTO newUser = new UserDTO(registration.getMail(), registration.getUsername(), registration.getUsername(), registration.getPassword(),
+                    registration.getFirstname(), registration.getLastname(), null, "ROLE_USER", 0., new ArrayList<Contact>(), new ArrayList<Transaction>());
+            MyUser newMe = createUser(newUser);
+            if (newMe.getUserName().contentEquals(registration.getUsername())) {
+                return "Registered";
+            }
+            return "Username issue while registering";
+        } catch (Exception e) {
+            log.error("registerUser: " + e.getMessage());
+            throw new ExceptionHandler("We could not register your user");
         }
-        return "Username issue while registering";
     }
 }
