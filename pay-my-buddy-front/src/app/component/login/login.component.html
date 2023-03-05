@@ -1,0 +1,97 @@
+<div class="root">
+  <div class="loginModal">
+    <div class="header">
+
+    </div>
+
+    <!--<div class="icon-wrapper">
+      <img
+        src="assets/images/pay-my-buddy-logo.png"
+        alt="logo pay-app"
+      />
+    </div>-->
+
+    <button (click)="goToHome()" class="button button-validate button-home">
+      Pay my Buddy
+    </button>
+
+    <div class="content">
+      <app-error-message
+        message="Could not authenticate user"
+        [visible]="hasAuthError"
+      >
+      </app-error-message>
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="form-group">
+          <input
+            type="text"
+            placeholder="Enter username"
+            id="email"
+            [ngClass]="{
+              'input-error': hasError('email')
+            }"
+            class="input"
+            formControlName="email"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('email')"
+            message="Please provide a valid email"
+          >
+          </app-error-message>
+        </div>
+
+        <div class="form-group">
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter password"
+            class="input"
+            [ngClass]="{
+              'input-error': hasError('password')
+            }"
+            formControlName="password"
+            (change)="handleChange()"
+          />
+          <app-error-message
+            [visible]="hasError('password')"
+            message="Please provide a valid password"
+          >
+          </app-error-message>
+        </div>
+
+        <div class="form-group">
+          <mat-checkbox class="remember-checkbox" [checked]="checkRemember">Remember me</mat-checkbox>
+
+        </div>
+
+        <button class="button login-button button-primary" type="submit">
+          Log in
+        </button>
+        <button (click)="register()" class="button login-button button-primary">
+          Register
+        </button>
+      </form>
+      <div class="providers">
+
+
+        <a href="{{ googleURL }}">
+
+        </a>
+        <a href="{{ githubURL }}">
+
+        </a>
+
+        <button (click)="logGoogle()" class="button login-button button-secondary">
+          Login with Google
+        </button>
+
+        <button (click)="logGithub()" class="button login-button button-secondary">
+          Login with Github
+        </button>
+
+
+      </div>
+    </div>
+  </div>
+</div>

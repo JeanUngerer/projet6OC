@@ -1,0 +1,154 @@
+
+<div class="transferModal">
+  <div class="content">
+
+    <form class="transfer-form" [formGroup]="addMoneyForm" (ngSubmit)="sendFunds()">
+
+      <label class="form-group-label label">Add funds to your wallet</label>
+      <div class="form-group">
+        <input
+          type="number"
+          id="amount"
+          placeholder="Enter amount"
+          class="input"
+          [ngClass]="{
+                  'input-error': hasError('amount')
+                }"
+          formControlName="amount"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && hasError('amount')"
+          message="Please provide a valid amount"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-primary" type="submit">
+        Add Funds
+      </button>
+
+
+
+    </form>
+    <br>
+
+    <form class="transfer-form" [formGroup]="withdrawMoneyForm" (ngSubmit)="withdrawFunds()">
+
+      <label class="form-group-label label">Withdraw funds from your wallet</label>
+      <div class="form-group">
+        <input
+          type="number"
+          id="withdraw-amount"
+          placeholder="Enter amount"
+          class="input"
+          [ngClass]="{
+                  'input-error': !withdrawMoneyForm.valid
+                }"
+          formControlName="amount"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !withdrawMoneyForm.valid"
+          message="Please provide a valid amount"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-primary" type="submit">
+        Withdraw Funds
+      </button>
+    </form>
+
+
+    <br>
+
+    <form class="transfer-form" [formGroup]="editPhoneNumberForm" (ngSubmit)="modifPhone()">
+
+      <label class="form-group-label label">Phone Number : {{currentPhone}}</label>
+      <div class="form-group">
+        <input
+          type="text"
+          id="update-phone"
+          placeholder="Enter new phone Number"
+          class="input"
+          [ngClass]="{
+                  'input-error': !editPhoneNumberForm.valid
+                }"
+          formControlName="modif"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !editPhoneNumberForm.valid"
+          message="Please provide a valid phone number"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-dangerous" type="submit">
+        Edit phone Number
+      </button>
+    </form>
+
+
+    <br>
+
+    <form class="transfer-form" [formGroup]="editFnameForm" (ngSubmit)="modifFname()">
+
+      <label class="form-group-label label">Firstname : {{currentFname}}</label>
+      <div class="form-group">
+        <input
+          type="text"
+          id="update-firstname"
+          placeholder="Enter new firstname"
+          class="input"
+          [ngClass]="{
+                  'input-error': !editFnameForm.valid
+                }"
+          formControlName="modif"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !editFnameForm.valid"
+          message="Please provide a valid firstname"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-dangerous" type="submit">
+        Edit FirstName
+      </button>
+    </form>
+
+
+    <br>
+
+    <form class="transfer-form" [formGroup]="editLnameForm" (ngSubmit)="modifLname()">
+
+      <label class="form-group-label label">Lastname : {{currentLname}}</label>
+      <div class="form-group">
+        <input
+          type="text"
+          id="update-lastname"
+          placeholder="Enter new lastname"
+          class="input"
+          [ngClass]="{
+                  'input-error': !editLnameForm.valid
+                }"
+          formControlName="modif"
+          (change)="resetSubmitted()"
+        />
+        <app-error-message
+          [visible]="submitted && !editLnameForm.valid"
+          message="Please provide a valid Lastname"
+        >
+        </app-error-message>
+      </div>
+
+      <button class="button login-button button-dangerous" type="submit">
+        Edit Lastname
+      </button>
+    </form>
+
+  </div>
+</div>

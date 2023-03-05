@@ -1,0 +1,30 @@
+<div class="topnav">
+  <div class="left">
+    <a routerLink="home">Home</a>
+    <a routerLink="transfer">Transfers</a>
+    <a routerLink="user">My account</a>
+    <a routerLink="contact">Contacts</a>
+  </div>
+
+  <div class="right" *ngIf="!logged">
+    <a class="login" routerLink="/login" (click)="handleClickLogout()">
+    Login
+    </a>
+
+  </div>
+
+  <div class="right" *ngIf="logged">
+    <div class="balance" >My Identifier : {{myIdentifier}}</div>
+
+
+    <div class="balance" >My Balance : {{myBalance | currency:'EUR'}}</div>
+
+    <a class="logout" routerLink="/login" (click)="handleClickLogout()">
+      <img
+        src="assets/images/logout.svg"
+        alt="logout"
+        class="logout"
+      />
+    </a>
+  </div>
+</div>
