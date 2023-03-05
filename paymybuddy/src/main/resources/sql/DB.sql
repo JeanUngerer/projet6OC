@@ -19,6 +19,7 @@ create table users
     email        varchar(50)  not null,
     firstname    varchar(50)  null,
     lastname     varchar(50)  null,
+    displayes_login varchar(50)  not null,
     password     varchar(255) not null,
     phone_number varchar(15)  null,
     provider     varchar(255) null,

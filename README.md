@@ -27,20 +27,21 @@ une adresse e-mail ou un compte de réseaux sociaux;
 * Variables d'environement à setup :
   * DBUSER représente datasource.username
   * DBPASS représente datasource.password
+* Les scripts sql de creation des tables ne sont pas nécessaire pour lancer le projet (générées par le code) mais se trouvent sous : paymybuddy/src/main/ressources/sql/DB.sql
 
 ##### SpringBoot backend
 * à partir de la racine du projet : cd paymybuddy
-* mvn install
+* mvn install -DDBUSER=<datasource.username> -DDBPASS=<datasource.password>
 * par défaut le serveur spring se lance sur le port 8090 (modifier dans application.yml)
 * cd target
 * java -jar paymybuddy-0.0.1-SNAPSHOT.jar
-* A des fins de démonstration la database et réinitialiser à chaquelancement de l'application.
+* A des fins de démonstration la database et réinitialisée à chaque lancement de l'application.
 
 Deux utilisateurs sont générés avec les credentials suivants :
 * usernameAdmin/password
 * usernameUser/password
 
-Dans cette application en particulier l'Admin n'as pas de possibilités d'actions supplémentaire car il n'y a pas de backOffice.
+Les Admin ont accès à certains endpoint auxquels les autres utilisateur n'ont pas accès.
 
 
 ##### Angular Frontend
