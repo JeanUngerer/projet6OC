@@ -49,7 +49,6 @@ public class ContactService {
             log.info("findAllContact");
             List<Contact> contactList = new ArrayList<Contact>();
             contactRepository.findAll().forEach(ct -> contactList.add(contactMapper.entityToModel(ct)));
-//            return contactMapper.entitiesToModels(contactRepository.findAll());
             return  contactList;
         } catch (Exception e) {
             log.error("We could not find all contact: " + e.getMessage());
