@@ -113,7 +113,7 @@ public class TransactionControllerTest {
                         .contentType("application/json"))
                 .andExpect(jsonPath("$.message").value("Transaction sent to user : " + trader.getUserName()));
 
-        assertEquals(895., userRepository.findByUserName("user1").get().getBalance());
+        assertEquals(899.5, userRepository.findByUserName("user1").get().getBalance());
         assertEquals(100., userRepository.findByUserName("user2").get().getBalance());
     }
 

@@ -30,7 +30,7 @@ public class TransactionServiceTest {
 
     @Test
     public void sendTransactionServiceTest(){
-        Double FeesRate = 0.05;
+        Double FeesRate = 0.005;
 
         MyUser applicationReceiver = userService.createUser(new UserDTO( "Admin@mail.com", "useradmin", "useradmin","passAdmin", "AdminPayed",
                 "AdminPayed", "0000000000", "ROLE_ADMIN", 0., new ArrayList<Contact>(), new ArrayList<Transaction>()));
